@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chamado Aberto | Jovem Protagonista IEL</title>
+  <meta name="description" content="Projeto Jovem Protagonista (IEL Bahia): uma planilha de gestão de chamados para reduzir o tempo de resposta na manutenção de elevadores e ar-condicionado.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23c2410c'/%3E%3Ctext x='16' y='21' font-family='Arial' font-weight='800' font-size='13' fill='%23fff8f3' text-anchor='middle'%3ECA%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..800;1,62..125,400..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="nav">
+    <div class="wrap nav__inner">
+      <a href="#topo" class="brand" aria-label="Chamado Aberto, início">
+        <span class="brand__mark" aria-hidden="true">CA</span>
+        <span class="brand__name">Chamado Aberto</span>
+      </a>
+      <nav aria-label="Seções">
+        <ul class="nav__links">
+          <li><a href="#problema">Problema</a></li>
+          <li><a href="#metodo">Como fizemos</a></li>
+          <li><a href="#prototipo">Protótipo</a></li>
+          <li><a href="#resultados">Resultados</a></li>
+        </ul>
+      </nav>
+      <a href="#prototipo" class="btn btn--small">Testar a planilha</a>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <!-- HERO -->
+    <section class="hero" id="topo">
+      <div class="wrap hero__grid">
+        <div class="hero__copy reveal">
+          <p class="eyebrow">Projeto Jovem Protagonista · IEL Bahia</p>
+          <h1>O elevador parou. <em>Quem ficou sabendo?</em></h1>
+          <p class="lead">Criamos uma planilha que junta todos os chamados de manutenção num só lugar, para ninguém mais esperar sem resposta.</p>
+          <div class="hero__ctas">
+            <a href="#prototipo" class="btn">Testar a planilha <i class="ph-bold ph-arrow-down-right" aria-hidden="true"></i></a>
+            <a href="#metodo" class="btn btn--ghost">Ver o processo</a>
+          </div>
+        </div>
+
+        <div class="hero__tickets reveal" aria-label="Últimos chamados registrados na planilha">
+          <ol class="ticket-stack" id="heroStack"></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROBLEMA -->
+    <section class="problem" id="problema">
+      <div class="wrap">
+        <h2 class="problem__statement reveal">
+          Ar-condicionado quebrado no 4º andar. Elevador travando no térreo.
+          O aviso ia por mensagem, por corredor, por <span class="hl">“alguém já avisou?”</span>
+          E ninguém sabia quanto tempo cada conserto levava.
+        </h2>
+        <div class="problem__grid">
+          <div class="problem__item reveal">
+            <i class="ph ph-chats-circle" aria-hidden="true"></i>
+            <h3>Pedidos espalhados</h3>
+            <p>Cada solicitação chegava por um canal diferente e se perdia no meio do caminho.</p>
+          </div>
+          <div class="problem__item reveal">
+            <i class="ph ph-clock-countdown" aria-hidden="true"></i>
+            <h3>Sem medida de tempo</h3>
+            <p>Não existia registro de quando o chamado abria e quando o problema era resolvido.</p>
+          </div>
+          <div class="problem__item reveal">
+            <i class="ph ph-repeat" aria-hidden="true"></i>
+            <h3>Falhas que se repetem</h3>
+            <p>Sem histórico, ninguém conseguia apontar qual equipamento quebrava com mais frequência.</p>
+          </div>
+        </div>
+        <p class="problem__credit reveal">O gargalo foi observado no dia a dia da empresa por <strong>Erick Mendes</strong>, um dos jovens aprendizes do grupo.</p>
+      </div>
+    </section>
+
+    <!-- MÉTODO -->
+    <section class="method" id="metodo">
+      <div class="wrap">
+        <h2 class="section-title reveal">Do corredor à planilha, em cinco movimentos</h2>
+        <ol class="track">
+          <li class="track__step reveal">
+            <span class="track__icon"><i class="ph ph-eye" aria-hidden="true"></i></span>
+            <h3>Observar</h3>
+            <p>Erick identificou a demora nas manutenções de elevadores e ar-condicionado.</p>
+          </li>
+          <li class="track__step reveal">
+            <span class="track__icon"><i class="ph ph-users-three" aria-hidden="true"></i></span>
+            <h3>Conversar</h3>
+            <p>O grupo discutiu como o fluxo de chamados poderia ficar mais simples e rápido.</p>
+          </li>
+          <li class="track__step reveal">
+            <span class="track__icon"><i class="ph ph-check-square-offset" aria-hidden="true"></i></span>
+            <h3>Escolher</h3>
+            <p>A solução: uma planilha padronizada, acessível a todos e fácil de acompanhar.</p>
+          </li>
+          <li class="track__step reveal">
+            <span class="track__icon"><i class="ph ph-table" aria-hidden="true"></i></span>
+            <h3>Construir</h3>
+            <p>Montamos os campos: ID, data, solicitante, setor, equipamento, descrição, status e tempo.</p>
+          </li>
+          <li class="track__step reveal">
+            <span class="track__icon"><i class="ph ph-flask" aria-hidden="true"></i></span>
+            <h3>Testar</h3>
+            <p>Simulamos chamados reais e validamos o cálculo automático do tempo de resposta.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- PROTÓTIPO -->
+    <section class="proto" id="prototipo">
+      <div class="wrap">
+        <p class="eyebrow">O protótipo</p>
+        <h2 class="section-title">Abra um chamado e veja a planilha trabalhar</h2>
+        <p class="section-sub">Uma versão funcional do nosso sistema. Registre uma ocorrência, avance o status e acompanhe o tempo médio de atendimento em tempo real.</p>
+
+        <div class="panel">
+          <aside class="panel__form">
+            <h3>Novo chamado</h3>
+            <form id="ticketForm" novalidate>
+              <div class="field">
+                <label for="fSolicitante">Solicitante</label>
+                <input id="fSolicitante" name="solicitante" type="text" autocomplete="name" placeholder="Ex.: Juliana Ramos">
+                <p class="field__error" id="eSolicitante"></p>
+              </div>
+              <div class="field">
+                <label for="fSetor">Setor / Andar</label>
+                <input id="fSetor" name="setor" type="text" placeholder="Ex.: Financeiro, 3º andar">
+                <p class="field__error" id="eSetor"></p>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="fEquip">Equipamento</label>
+                  <select id="fEquip" name="equipamento">
+                    <option value="">Selecione</option>
+                    <option>Elevador social</option>
+                    <option>Elevador de serviço</option>
+                    <option>Ar-condicionado</option>
+                  </select>
+                  <p class="field__error" id="eEquip"></p>
+                </div>
+                <div class="field">
+                  <label for="fTipo">Tipo de problema</label>
+                  <select id="fTipo" name="tipo">
+                    <option value="">Selecione</option>
+                    <option>Não liga</option>
+                    <option>Ruído anormal</option>
+                    <option>Travamento</option>
+                    <option>Vazamento</option>
+                    <option>Temperatura irregular</option>
+                    <option>Outro</option>
+                  </select>
+                  <p class="field__error" id="eTipo"></p>
+                </div>
+              </div>
+              <div class="field">
+                <label for="fDesc">Descrição <span class="opt">(opcional)</span></label>
+                <textarea id="fDesc" name="descricao" rows="2" placeholder="O que está acontecendo?"></textarea>
+              </div>
+              <button type="submit" class="btn btn--full">Registrar chamado <i class="ph-bold ph-plus" aria-hidden="true"></i></button>
+              <p class="form__ok" id="formOk" role="status" aria-live="polite"></p>
+            </form>
+          </aside>
+
+          <div class="panel__sheet">
+            <div class="kpis" aria-live="polite">
+              <div class="kpi">
+                <span class="kpi__label">Em aberto</span>
+                <span class="kpi__value" id="kOpen">0</span>
+              </div>
+              <div class="kpi">
+                <span class="kpi__label">Tempo médio de resolução</span>
+                <span class="kpi__value" id="kAvg">-</span>
+              </div>
+              <div class="kpi">
+                <span class="kpi__label">Equipamento com mais falhas</span>
+                <span class="kpi__value kpi__value--text" id="kTop">-</span>
+              </div>
+            </div>
+
+            <div class="sheet__toolbar">
+              <div class="filters" role="group" aria-label="Filtrar por status">
+                <button class="chip is-on" data-filter="todos">Todos</button>
+                <button class="chip" data-filter="Aberto">Abertos</button>
+                <button class="chip" data-filter="Em atendimento">Em atendimento</button>
+                <button class="chip" data-filter="Resolvido">Resolvidos</button>
+              </div>
+              <div class="sheet__actions">
+                <button class="link-btn" id="btnCsv"><i class="ph ph-download-simple" aria-hidden="true"></i> Baixar CSV</button>
+                <button class="link-btn" id="btnReset"><i class="ph ph-arrow-counter-clockwise" aria-hidden="true"></i> Restaurar exemplo</button>
+              </div>
+            </div>
+
+            <div class="sheet" tabindex="0" aria-label="Tabela de chamados">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Abertura</th>
+                    <th scope="col">Solicitante</th>
+                    <th scope="col">Setor / Andar</th>
+                    <th scope="col">Equipamento</th>
+                    <th scope="col">Problema</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Tempo</th>
+                  </tr>
+                </thead>
+                <tbody id="sheetBody"></tbody>
+              </table>
+              <div class="empty" id="emptyState" hidden>
+                <i class="ph ph-tray" aria-hidden="true"></i>
+                <p>Nenhum chamado com esse status.</p>
+              </div>
+            </div>
+            <p class="sheet__note">Dados de exemplo. Clique no status de um chamado para avançá-lo. Tudo fica salvo só no seu navegador.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTADOS -->
+    <section class="results" id="resultados">
+      <div class="wrap">
+        <h2 class="section-title reveal">O que muda com a planilha</h2>
+        <div class="bento">
+          <article class="bento__cell bento__cell--feature reveal">
+            <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+            <h3>Histórico transparente</h3>
+            <p>Todo chamado fica registrado, do pedido até a solução. Qualquer pessoa consegue consultar o andamento.</p>
+          </article>
+          <article class="bento__cell bento__cell--accent reveal">
+            <i class="ph ph-warning-diamond" aria-hidden="true"></i>
+            <h3>Falhas recorrentes à vista</h3>
+            <p>Fica fácil enxergar qual equipamento mais quebra e agir na causa.</p>
+          </article>
+          <article class="bento__cell bento__cell--dark reveal">
+            <i class="ph ph-timer" aria-hidden="true"></i>
+            <h3>Tempo médio medido</h3>
+            <p>O setor de manutenção passa a ter um número real para acompanhar e melhorar.</p>
+          </article>
+          <article class="bento__cell bento__cell--skills reveal">
+            <h3>O que a gente aprendeu</h3>
+            <ul class="skills">
+              <li>Trabalho em equipe</li>
+              <li>Capacidade analítica</li>
+              <li>Responsabilidade</li>
+              <li>Protagonismo jovem</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONCLUSÃO -->
+    <section class="closing">
+      <div class="wrap closing__inner reveal">
+        <p class="eyebrow">Conclusão</p>
+        <p class="closing__text">Pequenos ajustes na comunicação geram grande impacto na rotina. Mesmo em formação, <strong>aprendizes conseguem propor mudanças reais</strong> dentro da empresa.</p>
+        <div class="next">
+          <i class="ph ph-arrow-bend-down-right" aria-hidden="true"></i>
+          <div>
+            <h3>Próximo passo</h3>
+            <p>Automatizar a abertura de chamados com formulários digitais (Google Forms ou Microsoft Forms) ligados direto à planilha.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__grid">
+      <div>
+        <a href="#topo" class="brand">
+          <span class="brand__mark" aria-hidden="true">CA</span>
+          <span class="brand__name">Chamado Aberto</span>
+        </a>
+        <p class="footer__about">Projeto desenvolvido por jovens aprendizes no programa Jovem Protagonista do IEL Bahia, 2026.</p>
+      </div>
+      <div>
+        <h2 class="footer__h">Equipe</h2>
+        <ul class="team" id="teamList"></ul>
+      </div>
+      <div>
+        <h2 class="footer__h">Referência</h2>
+        <p class="ref">INSTITUTO EUVALDO LODI (IEL Bahia). <em>Diretrizes do Projeto Jovem Protagonista.</em> Salvador, 2026.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
