@@ -27,6 +27,7 @@
         <ul class="nav__links">
           <li><a href="#problema">Problema</a></li>
           <li><a href="#metodo">Como fizemos</a></li>
+          <li><a href="#fluxo">Fluxo</a></li>
           <li><a href="#prototipo">Protótipo</a></li>
           <li><a href="#resultados">Resultados</a></li>
         </ul>
@@ -118,17 +119,59 @@
       </div>
     </section>
 
+    <!-- FLUXO -->
+    <section class="flow" id="fluxo">
+      <div class="wrap">
+        <h2 class="section-title reveal">Dois formulários, uma planilha</h2>
+        <p class="section-sub reveal">Ninguém edita a planilha na mão. Quem pede usa um formulário, o suporte usa outro, e a planilha organiza tudo sozinha.</p>
+
+        <div class="flow__grid">
+          <div class="lane reveal">
+            <h3 class="lane__title"><i class="ph ph-user" aria-hidden="true"></i> Quem pede</h3>
+            <ol class="lane__steps">
+              <li><strong>Abre o formulário de chamado</strong><span>Informa setor, equipamento e o tipo de problema.</span></li>
+              <li><strong>Recebe o número do chamado</strong><span>Com o ID (ex.: CH-0008) dá para acompanhar o andamento.</span></li>
+              <li><strong>Consulta o status</strong><span>Vê na planilha se está aberto, em atendimento ou resolvido.</span></li>
+            </ol>
+          </div>
+
+          <div class="hub reveal">
+            <i class="ph ph-table" aria-hidden="true"></i>
+            <h3>Planilha</h3>
+            <ul>
+              <li>Gera o ID e a data de abertura</li>
+              <li>Guarda quem atendeu e o que foi feito</li>
+              <li>Calcula o tempo de resolução</li>
+              <li>Mostra o equipamento que mais falha</li>
+            </ul>
+          </div>
+
+          <div class="lane reveal">
+            <h3 class="lane__title"><i class="ph ph-wrench" aria-hidden="true"></i> Suporte</h3>
+            <ol class="lane__steps">
+              <li><strong>Vê os chamados em aberto</strong><span>A fila fica na planilha, do mais antigo ao mais novo.</span></li>
+              <li><strong>Inicia o atendimento</strong><span>No formulário do suporte, informa o ID e o nome do técnico.</span></li>
+              <li><strong>Conclui o chamado</strong><span>Envia o mesmo formulário dizendo o que foi feito. O status vira Resolvido.</span></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- PROTÓTIPO -->
     <section class="proto" id="prototipo">
       <div class="wrap">
         <p class="eyebrow">O protótipo</p>
         <h2 class="section-title">Abra um chamado e veja a planilha trabalhar</h2>
-        <p class="section-sub">Uma versão funcional do nosso sistema. Registre uma ocorrência, avance o status e acompanhe o tempo médio de atendimento em tempo real.</p>
+        <p class="section-sub">Uma versão funcional do nosso sistema. Abra um chamado, troque para o lado do suporte e conclua o atendimento.</p>
 
         <div class="panel">
           <aside class="panel__form">
-            <h3>Novo chamado</h3>
-            <form id="ticketForm" novalidate>
+            <div class="tabs" role="tablist" aria-label="Formulários">
+              <button class="tab is-on" role="tab" id="tabAbrir" aria-selected="true" aria-controls="ticketForm">Abrir chamado</button>
+              <button class="tab" role="tab" id="tabSuporte" aria-selected="false" aria-controls="supportForm" tabindex="-1">Suporte</button>
+            </div>
+            <form id="ticketForm" role="tabpanel" aria-labelledby="tabAbrir" novalidate>
               <div class="field">
                 <label for="fSolicitante">Solicitante</label>
                 <input id="fSolicitante" name="solicitante" type="text" autocomplete="name" placeholder="Ex.: Juliana Ramos">
@@ -169,8 +212,32 @@
                 <textarea id="fDesc" name="descricao" rows="2" placeholder="O que está acontecendo?"></textarea>
               </div>
               <button type="submit" class="btn btn--full">Registrar chamado <i class="ph-bold ph-plus" aria-hidden="true"></i></button>
-              <p class="form__ok" id="formOk" role="status" aria-live="polite"></p>
             </form>
+
+            <form id="supportForm" role="tabpanel" aria-labelledby="tabSuporte" novalidate hidden>
+              <div class="field">
+                <label for="sChamado">Chamado</label>
+                <select id="sChamado" name="chamado"></select>
+                <p class="field__error" id="eChamado"></p>
+              </div>
+              <div class="field">
+                <label for="sTecnico">Técnico responsável</label>
+                <input id="sTecnico" name="tecnico" type="text" placeholder="Ex.: Anderson Reis">
+                <p class="field__error" id="eTecnico"></p>
+              </div>
+              <fieldset class="field choice">
+                <legend>Atualização</legend>
+                <label><input type="radio" name="acao" value="Em atendimento" checked> Iniciar atendimento</label>
+                <label><input type="radio" name="acao" value="Resolvido"> Concluir chamado</label>
+              </fieldset>
+              <div class="field">
+                <label for="sSolucao">O que foi feito <span class="opt" id="solucaoOpt">(opcional)</span></label>
+                <textarea id="sSolucao" name="solucao" rows="2" placeholder="Ex.: troca do sensor da porta"></textarea>
+                <p class="field__error" id="eSolucao"></p>
+              </div>
+              <button type="submit" class="btn btn--full">Enviar atualização <i class="ph-bold ph-paper-plane-tilt" aria-hidden="true"></i></button>
+            </form>
+            <p class="form__ok" id="formOk" role="status" aria-live="polite"></p>
           </aside>
 
           <div class="panel__sheet">
@@ -223,7 +290,7 @@
                 <p>Nenhum chamado com esse status.</p>
               </div>
             </div>
-            <p class="sheet__note">Dados de exemplo. Clique no status de um chamado para avançá-lo. Tudo fica salvo só no seu navegador.</p>
+            <p class="sheet__note">Dados de exemplo. Clique no status de um chamado para abri-lo no formulário do suporte. Tudo fica salvo só no seu navegador.</p>
           </div>
         </div>
       </div>

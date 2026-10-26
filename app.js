@@ -1,8 +1,7 @@
 // Edite aqui os nomes do grupo
 const EQUIPE = ["Erick Mendes"];
 
-const STORAGE_KEY = "chamado-aberto:v1";
-const FLOW = ["Aberto", "Em atendimento", "Resolvido"];
+const STORAGE_KEY = "chamado-aberto:v2";
 const ICONS = {
   "Elevador social": "ph-elevator",
   "Elevador de serviço": "ph-elevator",
@@ -11,12 +10,12 @@ const ICONS = {
 
 // Dados de exemplo usados na simulação
 const EXEMPLO = [
-  { id: 1, aberto: "2026-10-19T08:12", fechado: "2026-10-19T11:47", solicitante: "Mariana Lopes", setor: "Recepção, térreo", equipamento: "Elevador social", tipo: "Travamento", status: "Resolvido" },
-  { id: 2, aberto: "2026-10-19T13:30", fechado: "2026-10-20T09:05", solicitante: "Rafael Brito", setor: "Financeiro, 3º andar", equipamento: "Ar-condicionado", tipo: "Temperatura irregular", status: "Resolvido" },
-  { id: 3, aberto: "2026-10-21T09:40", fechado: "2026-10-21T15:18", solicitante: "Tainá Souza", setor: "RH, 2º andar", equipamento: "Ar-condicionado", tipo: "Vazamento", status: "Resolvido" },
-  { id: 4, aberto: "2026-10-22T10:02", fechado: "2026-10-22T12:26", solicitante: "Lucas Andrade", setor: "Almoxarifado, subsolo", equipamento: "Elevador de serviço", tipo: "Ruído anormal", status: "Resolvido" },
-  { id: 5, aberto: "2026-10-23T14:55", fechado: "2026-10-24T10:31", solicitante: "Jéssica Nunes", setor: "Comercial, 4º andar", equipamento: "Ar-condicionado", tipo: "Não liga", status: "Resolvido" },
-  { id: 6, aberto: "2026-10-26T08:20", fechado: null, solicitante: "Diego Santana", setor: "TI, 4º andar", equipamento: "Ar-condicionado", tipo: "Ruído anormal", status: "Em atendimento" },
+  { id: 1, aberto: "2026-10-19T08:12", fechado: "2026-10-19T11:47", solicitante: "Mariana Lopes", setor: "Recepção, térreo", equipamento: "Elevador social", tipo: "Travamento", status: "Resolvido", tecnico: "Anderson Reis", solucao: "Reset do quadro de comando e ajuste do sensor da porta" },
+  { id: 2, aberto: "2026-10-19T13:30", fechado: "2026-10-20T09:05", solicitante: "Rafael Brito", setor: "Financeiro, 3º andar", equipamento: "Ar-condicionado", tipo: "Temperatura irregular", status: "Resolvido", tecnico: "Wellington Prado", solucao: "Limpeza dos filtros e recarga de gás" },
+  { id: 3, aberto: "2026-10-21T09:40", fechado: "2026-10-21T15:18", solicitante: "Tainá Souza", setor: "RH, 2º andar", equipamento: "Ar-condicionado", tipo: "Vazamento", status: "Resolvido", tecnico: "Wellington Prado", solucao: "Desentupimento do dreno da evaporadora" },
+  { id: 4, aberto: "2026-10-22T10:02", fechado: "2026-10-22T12:26", solicitante: "Lucas Andrade", setor: "Almoxarifado, subsolo", equipamento: "Elevador de serviço", tipo: "Ruído anormal", status: "Resolvido", tecnico: "Anderson Reis", solucao: "Lubrificação das guias da cabine" },
+  { id: 5, aberto: "2026-10-23T14:55", fechado: "2026-10-24T10:31", solicitante: "Jéssica Nunes", setor: "Comercial, 4º andar", equipamento: "Ar-condicionado", tipo: "Não liga", status: "Resolvido", tecnico: "Wellington Prado", solucao: "Troca do capacitor do compressor" },
+  { id: 6, aberto: "2026-10-26T08:20", fechado: null, solicitante: "Diego Santana", setor: "TI, 4º andar", equipamento: "Ar-condicionado", tipo: "Ruído anormal", status: "Em atendimento", tecnico: "Wellington Prado", solucao: "" },
   { id: 7, aberto: "2026-10-26T09:47", fechado: null, solicitante: "Paula Cerqueira", setor: "Diretoria, 5º andar", equipamento: "Elevador social", tipo: "Não liga", status: "Aberto" },
 ];
 
@@ -90,8 +89,9 @@ function renderSheet() {
     const tempo = c.fechado
       ? fmtDuracao(horas(c.aberto, c.fechado))
       : `<span class="muted">há ${fmtDuracao(Math.max(0, horas(c.aberto, nowLocal())))}</span>`;
-    const proximo = FLOW[FLOW.indexOf(c.status) + 1];
-    const label = proximo ? `Status ${c.status}. Avançar para ${proximo}` : `Status ${c.status}`;
+    const resolvido = c.status === "Resolvido";
+    const label = resolvido ? `Status ${c.status}` : `Status ${c.status}. Atualizar no formulário do suporte`;
+    const dica = c.tecnico ? `${c.tecnico}${c.solucao ? ": " + c.solucao : ""}` : "";
     return `
       <tr data-id="${c.id}" class="${c.id === novoId ? "is-new" : ""}">
         <td class="mono">${fmtId(c.id)}</td>
@@ -100,7 +100,7 @@ function renderSheet() {
         <td>${esc(c.setor)}</td>
         <td>${esc(c.equipamento)}</td>
         <td>${esc(c.tipo)}</td>
-        <td><button class="status ${statusClass(c.status)}" data-advance="${c.id}" aria-label="${label}" ${proximo ? "" : "disabled"}>
+        <td><button class="status ${statusClass(c.status)}" data-pick="${c.id}" aria-label="${label}" title="${esc(dica)}" ${resolvido ? "disabled" : ""}>
           <i class="ph-bold ${statusIcon(c.status)}" aria-hidden="true"></i>${c.status}</button></td>
         <td class="mono">${tempo}</td>
       </tr>`;
@@ -143,7 +143,19 @@ function renderHero() {
     </li>`).join("");
 }
 
+function renderSupportOptions() {
+  const sel = $("#sChamado");
+  const atual = sel.value;
+  const pendentes = chamados.filter((c) => c.status !== "Resolvido").sort((a, b) => a.id - b.id);
+  sel.innerHTML = pendentes.length
+    ? `<option value="">Selecione</option>` + pendentes.map((c) =>
+        `<option value="${c.id}">${fmtId(c.id)} · ${esc(c.equipamento)} (${c.status.toLowerCase()})</option>`).join("")
+    : `<option value="">Nenhum chamado pendente</option>`;
+  if (pendentes.some((c) => String(c.id) === atual)) sel.value = atual;
+}
+
 function renderAll() {
+  renderSupportOptions();
   renderSheet();
   renderKpis();
   renderHero();
@@ -152,17 +164,80 @@ function renderAll() {
 /* ---------- Interações ---------- */
 
 $("#sheetBody").addEventListener("click", (e) => {
-  const btn = e.target.closest("[data-advance]");
-  if (!btn) return;
-  const c = chamados.find((x) => x.id === Number(btn.dataset.advance));
-  const proximo = FLOW[FLOW.indexOf(c.status) + 1];
-  if (!proximo) return;
-  c.status = proximo;
-  if (proximo === "Resolvido") c.fechado = nowLocal();
+  const btn = e.target.closest("[data-pick]");
+  if (!btn || btn.disabled) return;
+  abrirAba("suporte");
+  $("#sChamado").value = btn.dataset.pick;
+  const c = chamados.find((x) => x.id === Number(btn.dataset.pick));
+  if (c.status === "Em atendimento") {
+    document.querySelector('input[name="acao"][value="Resolvido"]').checked = true;
+    if (c.tecnico) $("#sTecnico").value = c.tecnico;
+  }
+  atualizarSolucaoOpt();
+  $("#sChamado").closest(".panel__form").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  $("#sTecnico").focus({ preventScroll: true });
+});
+
+/* ---------- Abas dos formulários ---------- */
+function abrirAba(qual) {
+  const suporte = qual === "suporte";
+  $("#ticketForm").hidden = suporte;
+  $("#supportForm").hidden = !suporte;
+  [["#tabAbrir", !suporte], ["#tabSuporte", suporte]].forEach(([sel, on]) => {
+    const t = $(sel);
+    t.classList.toggle("is-on", on);
+    t.setAttribute("aria-selected", on);
+    t.tabIndex = on ? 0 : -1;
+  });
+  $("#formOk").textContent = "";
+}
+$("#tabAbrir").addEventListener("click", () => abrirAba("abrir"));
+$("#tabSuporte").addEventListener("click", () => abrirAba("suporte"));
+$(".tabs").addEventListener("keydown", (e) => {
+  if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+  const vaiSuporte = $("#ticketForm").hidden === false;
+  abrirAba(vaiSuporte ? "suporte" : "abrir");
+  (vaiSuporte ? $("#tabSuporte") : $("#tabAbrir")).focus();
+});
+
+/* ---------- Formulário do suporte ---------- */
+function atualizarSolucaoOpt() {
+  const concluir = document.querySelector('input[name="acao"]:checked').value === "Resolvido";
+  $("#solucaoOpt").textContent = concluir ? "" : "(opcional)";
+}
+document.querySelectorAll('input[name="acao"]').forEach((r) => r.addEventListener("change", atualizarSolucaoOpt));
+
+function marcarErro(campo, erro, msg) {
+  const el = document.getElementById(campo);
+  el.closest(".field").classList.toggle("has-error", !!msg);
+  el.setAttribute("aria-invalid", !!msg);
+  document.getElementById(erro).textContent = msg || "";
+  return msg ? el : null;
+}
+
+$("#supportForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const acao = document.querySelector('input[name="acao"]:checked').value;
+  const erros = [
+    marcarErro("sChamado", "eChamado", $("#sChamado").value ? "" : "Escolha o chamado."),
+    marcarErro("sTecnico", "eTecnico", $("#sTecnico").value.trim() ? "" : "Informe o técnico responsável."),
+    marcarErro("sSolucao", "eSolucao", acao === "Resolvido" && !$("#sSolucao").value.trim() ? "Descreva o que foi feito para concluir." : ""),
+  ].filter(Boolean);
+  if (erros.length) { erros[0].focus(); $("#formOk").textContent = ""; return; }
+
+  const c = chamados.find((x) => x.id === Number($("#sChamado").value));
+  c.status = acao;
+  c.tecnico = $("#sTecnico").value.trim();
+  if ($("#sSolucao").value.trim()) c.solucao = $("#sSolucao").value.trim();
+  if (acao === "Resolvido") c.fechado = nowLocal();
+  novoId = c.id;
   save();
   renderAll();
-  const alvo = document.querySelector(`[data-advance="${c.id}"]`);
-  if (alvo && !alvo.disabled) alvo.focus();
+  e.target.reset();
+  atualizarSolucaoOpt();
+  $("#formOk").textContent = acao === "Resolvido"
+    ? `${fmtId(c.id)} concluído. O tempo de resolução já entrou na média.`
+    : `${fmtId(c.id)} em atendimento com ${c.tecnico}.`;
 });
 
 document.querySelectorAll("[data-filter]").forEach((chip) => {
@@ -216,13 +291,13 @@ $("#ticketForm").addEventListener("submit", (e) => {
   $("#formOk").textContent = `Chamado ${fmtId(id)} registrado. Ele já aparece na planilha.`;
 });
 
-$("#ticketForm").addEventListener("input", (e) => {
+document.querySelectorAll("#ticketForm, #supportForm").forEach((f) => f.addEventListener("input", (e) => {
   const field = e.target.closest(".field");
   if (field && field.classList.contains("has-error") && e.target.value.trim()) {
     field.classList.remove("has-error");
     field.querySelector(".field__error").textContent = "";
   }
-});
+}));
 
 $("#btnReset").addEventListener("click", () => {
   chamados = structuredClone(EXEMPLO);
@@ -232,9 +307,10 @@ $("#btnReset").addEventListener("click", () => {
 });
 
 $("#btnCsv").addEventListener("click", () => {
-  const cab = ["ID", "Data de Abertura", "Solicitante", "Setor/Andar", "Equipamento", "Tipo de Problema", "Status", "Tempo de Resolução (h)"];
+  const cab = ["ID", "Data de Abertura", "Solicitante", "Setor/Andar", "Equipamento", "Tipo de Problema", "Status", "Técnico", "O que foi feito", "Data de Fechamento", "Tempo de Resolução (h)"];
   const linhas = chamados.map((c) => [
     fmtId(c.id), fmtData(c.aberto), c.solicitante, c.setor, c.equipamento, c.tipo, c.status,
+    c.tecnico || "", c.solucao || "", c.fechado ? fmtData(c.fechado) : "",
     c.fechado ? horas(c.aberto, c.fechado).toFixed(1).replace(".", ",") : "",
   ]);
   const csv = [cab, ...linhas].map((l) => l.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\n");
