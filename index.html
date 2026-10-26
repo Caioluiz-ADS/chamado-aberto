@@ -163,15 +163,37 @@
       <div class="wrap">
         <p class="eyebrow">O protótipo</p>
         <h2 class="section-title">Abra um chamado e veja a planilha trabalhar</h2>
-        <p class="section-sub">Uma versão funcional do nosso sistema. Abra um chamado, troque para o lado do suporte e conclua o atendimento.</p>
+        <p class="section-sub">Uma versão funcional do nosso sistema. Entre como funcionário para abrir um chamado, depois entre como suporte para concluir o atendimento.</p>
 
         <div class="panel">
           <aside class="panel__form">
-            <div class="tabs" role="tablist" aria-label="Formulários">
-              <button class="tab is-on" role="tab" id="tabAbrir" aria-selected="true" aria-controls="ticketForm">Abrir chamado</button>
-              <button class="tab" role="tab" id="tabSuporte" aria-selected="false" aria-controls="supportForm" tabindex="-1">Suporte</button>
+            <form id="loginForm" novalidate>
+              <h3>Entrar</h3>
+              <p class="login__intro">Funcionários abrem chamados. O suporte atualiza e conclui.</p>
+              <div class="field">
+                <label for="lEmail">E-mail</label>
+                <input id="lEmail" name="email" type="email" autocomplete="username" placeholder="nome@empresa.com">
+              </div>
+              <div class="field">
+                <label for="lSenha">Senha</label>
+                <input id="lSenha" name="senha" type="password" autocomplete="current-password">
+                <p class="field__error" id="eLogin"></p>
+              </div>
+              <button type="submit" class="btn btn--full">Entrar <i class="ph-bold ph-sign-in" aria-hidden="true"></i></button>
+              <div class="demo">
+                <p class="demo__title">Contas de teste</p>
+                <button type="button" class="demo__acc" data-conta="funcionario"><i class="ph ph-user" aria-hidden="true"></i><span><strong>Funcionário</strong> funcionarioteste@gmail.com</span></button>
+                <button type="button" class="demo__acc" data-conta="suporte"><i class="ph ph-wrench" aria-hidden="true"></i><span><strong>Suporte</strong> suportetestes@gmail.com</span></button>
+              </div>
+            </form>
+
+            <div class="session" id="sessionBar" hidden>
+              <span class="session__avatar" id="sessionIcon" aria-hidden="true"></span>
+              <span class="session__who"><strong id="sessionRole"></strong><span id="sessionEmail"></span></span>
+              <button type="button" class="link-btn" id="btnSair"><i class="ph ph-sign-out" aria-hidden="true"></i> Sair</button>
             </div>
-            <form id="ticketForm" role="tabpanel" aria-labelledby="tabAbrir" novalidate>
+
+            <form id="ticketForm" novalidate hidden>
               <div class="field">
                 <label for="fSolicitante">Solicitante</label>
                 <input id="fSolicitante" name="solicitante" type="text" autocomplete="name" placeholder="Ex.: Juliana Ramos">
@@ -214,7 +236,7 @@
               <button type="submit" class="btn btn--full">Registrar chamado <i class="ph-bold ph-plus" aria-hidden="true"></i></button>
             </form>
 
-            <form id="supportForm" role="tabpanel" aria-labelledby="tabSuporte" novalidate hidden>
+            <form id="supportForm" novalidate hidden>
               <div class="field">
                 <label for="sChamado">Chamado</label>
                 <select id="sChamado" name="chamado"></select>
@@ -290,7 +312,7 @@
                 <p>Nenhum chamado com esse status.</p>
               </div>
             </div>
-            <p class="sheet__note">Dados de exemplo. Clique no status de um chamado para abri-lo no formulário do suporte. Tudo fica salvo só no seu navegador.</p>
+            <p class="sheet__note">Dados de exemplo. Logado como suporte, clique no status de um chamado para atualizá-lo. Tudo fica salvo só no seu navegador.</p>
           </div>
         </div>
       </div>

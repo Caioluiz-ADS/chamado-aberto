@@ -1,5 +1,23 @@
 // Edite aqui os nomes do grupo
-const EQUIPE = ["Erick Mendes"];
+const EQUIPE = [
+  "Caio Luiz",
+  "Erick Mendes",
+  "Gabriel Carlos",
+  "Geovane Oliveira",
+  "Guilherme Gomes",
+  "Iasmin Lima",
+  "José Victor Seibert",
+  "Sofia Assis",
+  "Thauan Almeida",
+  "Vinicius Bisbo",
+];
+
+// Contas de demonstração do protótipo (não é um login real)
+const CONTAS = {
+  funcionario: { email: "funcionarioteste@gmail.com", senha: "123456789", papel: "Funcionário", nome: "Funcionário Teste", icone: "ph-user" },
+  suporte: { email: "suportetestes@gmail.com", senha: "123456789", papel: "Suporte", nome: "Suporte Teste", icone: "ph-wrench" },
+};
+const SESSION_KEY = "chamado-aberto:sessao";
 
 const STORAGE_KEY = "chamado-aberto:v2";
 const ICONS = {
@@ -22,6 +40,7 @@ const EXEMPLO = [
 let chamados = load();
 let filtro = "todos";
 let novoId = null;
+let perfil = null;
 
 function load() {
   try {
@@ -90,7 +109,8 @@ function renderSheet() {
       ? fmtDuracao(horas(c.aberto, c.fechado))
       : `<span class="muted">há ${fmtDuracao(Math.max(0, horas(c.aberto, nowLocal())))}</span>`;
     const resolvido = c.status === "Resolvido";
-    const label = resolvido ? `Status ${c.status}` : `Status ${c.status}. Atualizar no formulário do suporte`;
+    const travado = resolvido || perfil !== "suporte";
+    const label = travado ? `Status ${c.status}` : `Status ${c.status}. Atualizar no formulário do suporte`;
     const dica = c.tecnico ? `${c.tecnico}${c.solucao ? ": " + c.solucao : ""}` : "";
     return `
       <tr data-id="${c.id}" class="${c.id === novoId ? "is-new" : ""}">
@@ -100,7 +120,7 @@ function renderSheet() {
         <td>${esc(c.setor)}</td>
         <td>${esc(c.equipamento)}</td>
         <td>${esc(c.tipo)}</td>
-        <td><button class="status ${statusClass(c.status)}" data-pick="${c.id}" aria-label="${label}" title="${esc(dica)}" ${resolvido ? "disabled" : ""}>
+        <td><button class="status ${statusClass(c.status)}" data-pick="${c.id}" aria-label="${label}" title="${esc(dica)}" ${travado ? "disabled" : ""}>
           <i class="ph-bold ${statusIcon(c.status)}" aria-hidden="true"></i>${c.status}</button></td>
         <td class="mono">${tempo}</td>
       </tr>`;
@@ -166,7 +186,6 @@ function renderAll() {
 $("#sheetBody").addEventListener("click", (e) => {
   const btn = e.target.closest("[data-pick]");
   if (!btn || btn.disabled) return;
-  abrirAba("suporte");
   $("#sChamado").value = btn.dataset.pick;
   const c = chamados.find((x) => x.id === Number(btn.dataset.pick));
   if (c.status === "Em atendimento") {
@@ -178,27 +197,60 @@ $("#sheetBody").addEventListener("click", (e) => {
   $("#sTecnico").focus({ preventScroll: true });
 });
 
-/* ---------- Abas dos formulários ---------- */
-function abrirAba(qual) {
-  const suporte = qual === "suporte";
-  $("#ticketForm").hidden = suporte;
-  $("#supportForm").hidden = !suporte;
-  [["#tabAbrir", !suporte], ["#tabSuporte", suporte]].forEach(([sel, on]) => {
-    const t = $(sel);
-    t.classList.toggle("is-on", on);
-    t.setAttribute("aria-selected", on);
-    t.tabIndex = on ? 0 : -1;
-  });
+/* ---------- Login ---------- */
+function entrar(chave, focar) {
+  perfil = chave;
+  try { sessionStorage.setItem(SESSION_KEY, chave); } catch (_) {}
+  const conta = CONTAS[chave];
+  $("#loginForm").hidden = true;
+  $("#sessionBar").hidden = false;
+  $("#sessionRole").textContent = conta.papel;
+  $("#sessionEmail").textContent = conta.email;
+  $("#sessionIcon").innerHTML = `<i class="ph-bold ${conta.icone}"></i>`;
+  $("#ticketForm").hidden = chave !== "funcionario";
+  $("#supportForm").hidden = chave !== "suporte";
+  if (chave === "funcionario") $("#fSolicitante").value = conta.nome;
+  if (chave === "suporte") $("#sTecnico").value = conta.nome;
   $("#formOk").textContent = "";
+  renderSheet();
+  if (focar) (chave === "funcionario" ? $("#fSetor") : $("#sChamado")).focus();
 }
-$("#tabAbrir").addEventListener("click", () => abrirAba("abrir"));
-$("#tabSuporte").addEventListener("click", () => abrirAba("suporte"));
-$(".tabs").addEventListener("keydown", (e) => {
-  if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-  const vaiSuporte = $("#ticketForm").hidden === false;
-  abrirAba(vaiSuporte ? "suporte" : "abrir");
-  (vaiSuporte ? $("#tabSuporte") : $("#tabAbrir")).focus();
+
+function sair() {
+  perfil = null;
+  try { sessionStorage.removeItem(SESSION_KEY); } catch (_) {}
+  $("#loginForm").reset();
+  $("#loginForm").hidden = false;
+  $("#sessionBar").hidden = true;
+  $("#ticketForm").hidden = true;
+  $("#supportForm").hidden = true;
+  $("#formOk").textContent = "";
+  renderSheet();
+  $("#lEmail").focus();
+}
+
+$("#loginForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = $("#lEmail").value.trim().toLowerCase();
+  const senha = $("#lSenha").value;
+  const chave = Object.keys(CONTAS).find((k) => CONTAS[k].email === email && CONTAS[k].senha === senha);
+  const msg = !email || !senha ? "Preencha e-mail e senha." : !chave ? "E-mail ou senha incorretos." : "";
+  $("#eLogin").textContent = msg;
+  $("#lSenha").closest(".field").classList.toggle("has-error", !!msg);
+  if (msg) { (email ? $("#lSenha") : $("#lEmail")).focus(); return; }
+  entrar(chave, true);
 });
+
+document.querySelectorAll("[data-conta]").forEach((b) => b.addEventListener("click", () => {
+  const conta = CONTAS[b.dataset.conta];
+  $("#lEmail").value = conta.email;
+  $("#lSenha").value = conta.senha;
+  $("#eLogin").textContent = "";
+  $("#lSenha").closest(".field").classList.remove("has-error");
+  $("#loginForm").querySelector('button[type="submit"]').focus();
+}));
+
+$("#btnSair").addEventListener("click", sair);
 
 /* ---------- Formulário do suporte ---------- */
 function atualizarSolucaoOpt() {
@@ -234,6 +286,7 @@ $("#supportForm").addEventListener("submit", (e) => {
   save();
   renderAll();
   e.target.reset();
+  $("#sTecnico").value = CONTAS.suporte.nome;
   atualizarSolucaoOpt();
   $("#formOk").textContent = acao === "Resolvido"
     ? `${fmtId(c.id)} concluído. O tempo de resolução já entrou na média.`
@@ -288,6 +341,7 @@ $("#ticketForm").addEventListener("submit", (e) => {
   if (filtro !== "todos" && filtro !== "Aberto") document.querySelector('[data-filter="todos"]').click();
   renderAll();
   e.target.reset();
+  $("#fSolicitante").value = CONTAS.funcionario.nome;
   $("#formOk").textContent = `Chamado ${fmtId(id)} registrado. Ele já aparece na planilha.`;
 });
 
@@ -339,3 +393,7 @@ document.querySelectorAll(".reveal").forEach((el) => {
 });
 
 renderAll();
+try {
+  const salvo = sessionStorage.getItem(SESSION_KEY);
+  if (CONTAS[salvo]) entrar(salvo, false);
+} catch (_) {}
