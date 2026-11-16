@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="286 38 108 108" role="img" aria-label="Chamado Aberto">
+  <path d="M300 46 H380 a12 12 0 0 1 12 12 V108 a12 12 0 0 1 -12 12 H334 l-18 18 v-18 H300 a12 12 0 0 1 -12 -12 V58 a12 12 0 0 1 12 -12 Z" fill="#c2410c"/>
+  <path d="M340 60 L355 77 H325 Z" fill="#fff8f3" stroke="#fff8f3" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M325 89 H355 L340 106 Z" fill="#fff8f3" stroke="#fff8f3" stroke-width="3" stroke-linejoin="round"/>
+</svg>

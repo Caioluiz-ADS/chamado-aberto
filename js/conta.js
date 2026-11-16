@@ -21,7 +21,7 @@ function paginaLogin() {
   $("#app").innerHTML = `
     <main class="login">
       <section class="login__marca">
-        <span class="brand"><span class="brand__mark" aria-hidden="true">CA</span><span class="brand__name">Chamado Aberto</span></span>
+        <span class="brand"><img class="brand__mark" src="img/logo.svg" alt="" width="34" height="34"><span class="brand__name">Chamado Aberto</span></span>
         <div>
           <h1>O elevador parou. <em>Quem ficou sabendo?</em></h1>
           <p>Todos os chamados de manutenção de elevadores e ar-condicionado num só lugar.</p>

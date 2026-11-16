@@ -1,3 +1,5 @@
+<img src="img/logo.svg" alt="" width="72" height="72">
+
 # Chamado Aberto
 
 Sistema de chamados de manutenção de elevadores e ar-condicionado, do projeto **Jovem Protagonista (IEL Bahia)**. É um protótipo ilustrativo.
@@ -65,6 +67,7 @@ No plano grátis, o serviço dorme depois de 15 minutos sem acesso e leva cerca 
 ```
 chamado-aberto/
 ├── index.html
+├── img/logo.svg        # Logo (balão de chamado com as setas do elevador)
 ├── server/server.js    # Entrega o site e guarda os dados no SQLite (API /api/estado)
 ├── Dockerfile
 ├── docker-compose.yml

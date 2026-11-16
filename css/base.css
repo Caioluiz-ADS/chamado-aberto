@@ -109,12 +109,7 @@ a { color: inherit; }
 
 /* ---------- Marca ---------- */
 .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
-.brand__mark {
-  display: grid; place-items: center;
-  width: 34px; height: 34px; border-radius: 9px;
-  background: var(--accent); color: var(--accent-ink);
-  font: 800 13px/1 var(--font); font-stretch: 110%;
-}
+.brand__mark { display: block; width: 34px; height: 34px; flex-shrink: 0; }
 .brand__name { white-space: nowrap; font-weight: 700; font-stretch: 112%; letter-spacing: -.01em; }
 
 /* ---------- Status ---------- */

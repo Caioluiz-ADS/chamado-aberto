@@ -5,7 +5,7 @@ function htmlSobre() {
     <div class="sobre">
       <header class="sobre__barra">
         <div class="wrap sobre__barra-in">
-          <a href="#/chamados" class="brand"><span class="brand__mark" aria-hidden="true">CA</span><span class="brand__name">Chamado Aberto</span></a>
+          <a href="#/chamados" class="brand"><img class="brand__mark" src="img/logo.svg" alt="" width="34" height="34"><span class="brand__name">Chamado Aberto</span></a>
           <a href="#/chamados" class="btn btn--small">${usuario ? "Voltar aos chamados" : "Entrar no sistema"}</a>
         </div>
       </header>
@@ -118,7 +118,7 @@ function htmlSobre() {
       <footer class="footer">
         <div class="wrap footer__grid">
           <div>
-            <span class="brand"><span class="brand__mark" aria-hidden="true">CA</span><span class="brand__name">Chamado Aberto</span></span>
+            <span class="brand"><img class="brand__mark" src="img/logo.svg" alt="" width="34" height="34"><span class="brand__name">Chamado Aberto</span></span>
             <p class="footer__about">Projeto desenvolvido por jovens aprendizes no programa Jovem Protagonista do IEL Bahia, 2026.</p>
           </div>
           <div>

@@ -53,7 +53,7 @@ function shell(atual) {
     <div class="app">
       <aside class="menu" id="menu">
         <a href="#/chamados" class="brand brand--menu" aria-label="Chamado Aberto, início">
-          <span class="brand__mark" aria-hidden="true">CA</span><span class="brand__name">Chamado Aberto</span>
+          <img class="brand__mark" src="img/logo.svg" alt="" width="34" height="34"><span class="brand__name">Chamado Aberto</span>
         </a>
         <nav aria-label="Principal">
           <ul>
