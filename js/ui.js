@@ -119,7 +119,7 @@ function shell(atual) {
           <ul>
             ${itemMenu("chamados", ehTecnico() ? "Chamados" : "Meus chamados", "ph-tray", atual)}
             ${ehTecnico() ? itemMenu("indicadores", "Indicadores", "ph-chart-bar", atual) : ""}
-            ${itemMenu("planilha", "Planilha", "ph-table", atual)}
+            ${ehTecnico() ? itemMenu("planilha", "Planilha", "ph-table", atual) : ""}
           </ul>
           ${admin}
           <p class="menu__grupo">Minha conta</p>

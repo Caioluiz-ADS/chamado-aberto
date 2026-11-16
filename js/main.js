@@ -46,7 +46,7 @@ function render() {
 
   let chave = rotaEhPainel() ? "chamados" : rota;
   if (chave !== "admin/usuarios") senhaGerada = null;
-  const restrita = (chave.startsWith("admin/") && !ehAdmin()) || (chave === "indicadores" && !ehTecnico());
+  const restrita = (chave.startsWith("admin/") && !ehAdmin()) || (["indicadores", "planilha"].includes(chave) && !ehTecnico());
   if (!PAGINAS[chave] || restrita) {
     location.hash = "#/chamados";
     return;

@@ -29,7 +29,7 @@ Suporte e administrador têm a página **Indicadores**, com números e gráficos
 
 As animações são suaves e somem para quem ativa a redução de movimento no sistema.
 
-A **Planilha** continua com os campos ID, Data de Abertura, Solicitante, Setor/Andar, Equipamento, Tipo de Problema, Status e Tempo de Resolução, calcula o tempo médio e o equipamento com mais falhas, filtra por status e exporta em CSV.
+A **Planilha**, só para suporte e administrador, continua com os campos ID, Data de Abertura, Solicitante, Setor/Andar, Equipamento, Tipo de Problema, Status e Tempo de Resolução, calcula o tempo médio e o equipamento com mais falhas, filtra por status e exporta em CSV.
 
 ## Contas de teste
 
@@ -42,7 +42,7 @@ A **Planilha** continua com os campos ID, Data de Abertura, Solicitante, Setor/A
 1. Entre como **funcionário** e abra um chamado.
 2. Saia e entre como **suporte**. Abra o chamado, escolha o responsável e mude o status para **Resolvido**.
 3. Volte como **funcionário** e responda a pesquisa de satisfação.
-4. Em **Planilha**, use **Baixar CSV** para abrir no Excel, ou **Restaurar exemplo** para recomeçar.
+4. Como suporte, em **Planilha**, use **Baixar CSV** para abrir no Excel, ou **Restaurar exemplo** para recomeçar.
 
 Quando o administrador cadastra alguém em **Usuários**, o sistema gera uma **senha temporária** e mostra uma única vez. No primeiro acesso, a pessoa é levada a criar a própria senha antes de usar o sistema. Se alguém esquecer a senha, o administrador usa **Nova senha** na lista de usuários.
 
