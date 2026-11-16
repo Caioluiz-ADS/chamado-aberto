@@ -9,7 +9,11 @@ const PAGINAS = {
   "admin/status": paginaStatus,
   "admin/catalogo": paginaCatalogo,
   "admin/auditoria": paginaAuditoria,
+  indicadores: paginaIndicadores,
 };
+
+let ultimaChave = null;
+let entradaForcada = false;
 
 const rotaAtual = () => location.hash.replace(/^#\/?/, "").replace(/\/$/, "");
 const rotaEhPainel = () => /^chamados\/(novo|\d+)$/.test(rotaAtual());
@@ -42,7 +46,7 @@ function render() {
 
   let chave = rotaEhPainel() ? "chamados" : rota;
   if (chave !== "admin/usuarios") senhaGerada = null;
-  const restrita = chave.startsWith("admin/") && !ehAdmin();
+  const restrita = (chave.startsWith("admin/") && !ehAdmin()) || (chave === "indicadores" && !ehTecnico());
   if (!PAGINAS[chave] || restrita) {
     location.hash = "#/chamados";
     return;
@@ -51,6 +55,10 @@ function render() {
   $("#app").innerHTML = shell(chave);
   ligarShell();
   PAGINAS[chave]($("#conteudo"));
+  // A animação de entrada só roda ao trocar de tela (ou de período), não a cada salvamento.
+  if (chave !== ultimaChave || entradaForcada) $("#conteudo").classList.add("entrando");
+  ultimaChave = chave;
+  entradaForcada = false;
 
   if (rotaEhPainel()) {
     const alvo = rota.split("/")[1];

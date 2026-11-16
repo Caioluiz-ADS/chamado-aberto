@@ -58,6 +58,7 @@ document.addEventListener("click", (e) => {
 aplicarTema(temaAtual());
 
 let avisoTexto = "";
+let ultimoQtdSino = 0;
 const avisar = (t) => { avisoTexto = t; };
 
 function avisoHtml() {
@@ -105,6 +106,8 @@ function shell(atual) {
       ${itemMenu("admin/auditoria", "Auditoria", "ph-scroll", atual)}
     </ul>` : "";
   const qtd = naoLidas();
+  const sinoNovo = qtd > ultimoQtdSino;
+  ultimoQtdSino = qtd;
   return `
     <a class="skip" href="#conteudo" onclick="event.preventDefault();document.getElementById('conteudo').focus()">Pular para o conteúdo</a>
     <div class="app">
@@ -115,6 +118,7 @@ function shell(atual) {
         <nav aria-label="Principal">
           <ul>
             ${itemMenu("chamados", ehTecnico() ? "Chamados" : "Meus chamados", "ph-tray", atual)}
+            ${ehTecnico() ? itemMenu("indicadores", "Indicadores", "ph-chart-bar", atual) : ""}
             ${itemMenu("planilha", "Planilha", "ph-table", atual)}
           </ul>
           ${admin}
@@ -132,7 +136,7 @@ function shell(atual) {
           <button type="button" class="icone-btn barra__menu" id="btnMenu" aria-label="Abrir menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
           ${botaoTema()}
           <a href="#/notificacoes" class="icone-btn sino" aria-label="Notificações${qtd ? `, ${qtd} não lidas` : ""}">
-            <i class="ph ph-bell" aria-hidden="true"></i>${qtd ? `<span class="sino__qtd">${qtd > 9 ? "9+" : qtd}</span>` : ""}
+            <i class="ph ph-bell" aria-hidden="true"></i>${qtd ? `<span class="sino__qtd${sinoNovo ? " sino__qtd--novo" : ""}">${qtd > 9 ? "9+" : qtd}</span>` : ""}
           </a>
           <div class="sessao">
             ${avatar(usuario.nome, true)}

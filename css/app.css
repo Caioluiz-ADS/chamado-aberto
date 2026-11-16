@@ -320,3 +320,114 @@ form.caixa { margin-top: 16px; }
 .login__form { position: relative; }
 .tema-canto { position: absolute; top: 16px; right: 16px; }
 .sobre__acoes { display: flex; align-items: center; gap: 10px; }
+
+/* ---------- Indicadores ---------- */
+.g-periodo { margin-bottom: 16px; }
+.ind-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.kpi__nota { font-size: 12.5px; color: var(--muted); }
+.ind-kpis .kpi:first-child .kpi__nota { color: color-mix(in srgb, var(--bg) 70%, transparent); }
+.g-grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.g-cartao { padding: 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; min-width: 0; }
+.g-cartao--largo { grid-column: 1 / -1; }
+.g-cartao h2 { font-size: 17px; line-height: 1.2; }
+.g-cartao > .muted { font-size: 13.5px; margin: 4px 0 18px; }
+.g-vazio { color: var(--muted); font-size: 14.5px; padding: 18px 0; }
+
+.g-colunas { display: grid; grid-template-columns: auto 1fr; grid-template-rows: 180px auto; column-gap: 10px; }
+.g-colunas__max { font: 12px/1 var(--mono); color: var(--muted); align-self: start; }
+.g-colunas__area {
+  display: flex; align-items: flex-end; gap: 2px; height: 180px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(var(--line), var(--line)) top / 100% 1px no-repeat;
+}
+.g-col { flex: 1; height: 100%; display: flex; align-items: flex-end; min-width: 0; cursor: default; }
+.g-col__barra { width: 100%; max-width: 28px; margin-inline: auto; height: var(--v); min-height: 0; background: var(--accent); border-radius: 4px 4px 0 0; }
+.g-col:hover .g-col__barra { background: color-mix(in srgb, var(--accent) 80%, var(--ink)); }
+.g-colunas__eixo { grid-column: 2; display: flex; gap: 2px; margin-top: 6px; overflow: hidden; }
+.g-colunas__eixo span { flex: 1; min-width: 0; font: 11.5px/1 var(--mono); color: var(--muted); white-space: nowrap; overflow: visible; }
+
+.g-barras { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.g-barras li { display: grid; grid-template-columns: minmax(90px, 34%) 1fr auto; align-items: center; gap: 10px; font-size: 14px; cursor: default; }
+.g-barras__rotulo { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink-soft); }
+.g-barras__trilha { height: 14px; }
+.g-barras__barra { display: block; height: 100%; width: var(--v); background: var(--accent); border-radius: 0 4px 4px 0; }
+.g-barras li:hover .g-barras__barra { background: color-mix(in srgb, var(--accent) 80%, var(--ink)); }
+.g-barras__valor { font: 500 13px/1 var(--mono); color: var(--ink); min-width: 2ch; text-align: right; }
+
+.g-tabela { margin-top: 14px; font-size: 13.5px; }
+.g-tabela summary { cursor: pointer; color: var(--muted); }
+.g-tabela table { margin-top: 8px; border-collapse: collapse; width: 100%; }
+.g-tabela th, .g-tabela td { text-align: left; padding: 6px 8px; border-top: 1px solid var(--line); }
+.g-dica {
+  position: fixed; z-index: 90; pointer-events: none; max-width: 260px;
+  padding: 7px 10px; border-radius: 8px; font-size: 13px; line-height: 1.3;
+  background: var(--ink); color: var(--bg); box-shadow: var(--shadow);
+}
+
+@media (max-width: 760px) {
+  .g-grade { grid-template-columns: minmax(0, 1fr); }
+  .g-colunas { grid-template-rows: 140px auto; }
+  .g-colunas__area { height: 140px; }
+}
+
+/* ---------- Animações (desligadas para quem pede menos movimento) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes subir { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes surgir { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes deslizar { from { transform: translateX(40px); opacity: .4; } to { transform: none; opacity: 1; } }
+  @keyframes saltar { from { opacity: 0; transform: translateY(8px) scale(.97); } to { opacity: 1; transform: none; } }
+  @keyframes crescerY { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes crescerX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes pulso { 0% { transform: scale(.4); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }
+
+  /* Entrada da tela: cabeçalho e blocos sobem um depois do outro */
+  .entrando > * { animation: subir .42s var(--ease) both; }
+  .entrando > :nth-child(2) { animation-delay: 50ms; }
+  .entrando > :nth-child(3) { animation-delay: 100ms; }
+  .entrando > :nth-child(4) { animation-delay: 150ms; }
+  .entrando > :nth-child(n+5) { animation-delay: 200ms; }
+  .entrando .linha, .entrando tbody tr { animation: surgir .4s ease both; }
+  .entrando tbody tr:nth-child(2) { animation-delay: 30ms; }
+  .entrando tbody tr:nth-child(3) { animation-delay: 60ms; }
+  .entrando tbody tr:nth-child(4) { animation-delay: 90ms; }
+  .entrando tbody tr:nth-child(5) { animation-delay: 120ms; }
+  .entrando tbody tr:nth-child(n+6) { animation-delay: 150ms; }
+  /* Propriedades separadas: o atalho "animation" com var() junto de um atraso próprio é descartado pelo navegador. */
+  .entrando .g-col__barra, .entrando .g-barras__barra { animation-duration: .6s; animation-timing-function: var(--ease); animation-fill-mode: both; }
+  .entrando .g-col__barra { transform-origin: bottom; animation-name: crescerY; animation-delay: calc(250ms + var(--n) * 12ms); }
+  .entrando .g-barras__barra { transform-origin: left; animation-name: crescerX; animation-delay: calc(250ms + var(--n) * 60ms); }
+
+  /* Login e primeiro acesso */
+  .login__form form, .login__marca > div { animation: subir .5s var(--ease) both; }
+  .login__marca > div { animation-delay: 80ms; }
+
+  /* Painel do chamado, janelas e fundo escurecido */
+  .painel[open] { animation: deslizar .32s var(--ease); }
+  .janela[open] { animation: saltar .24s var(--ease); }
+  dialog[open]::backdrop { animation: surgir .25s ease; }
+  .painel__corpo > *, .abas { animation: surgir .25s ease both; }
+
+  /* Avisos, alertas e contador do sino */
+  .aviso, .alerta, .senha-gerada { animation: saltar .35s var(--ease) both; }
+  .sino__qtd--novo { animation: pulso .45s var(--ease) both; }
+
+  /* Menu no celular */
+  .menu.is-aberto { animation: deslizarMenu .28s var(--ease); }
+  @keyframes deslizarMenu { from { transform: translateX(-100%); } to { transform: none; } }
+
+  /* Respostas ao toque: botões, chips, abas e linhas */
+  .btn, .chip, .aba, .demo__acc, .icone-btn, .link-btn, .menu a, .notifs a, .kpi, .g-cartao {
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .2s var(--ease), box-shadow .2s ease;
+  }
+  .btn:hover:not([disabled]) { transform: translateY(-1px); }
+  .btn:active:not([disabled]), .chip:active, .icone-btn:active, .demo__acc:active { transform: scale(.97); }
+  .demo__acc:hover, .notifs a:hover { transform: translateX(3px); }
+  .kpi:hover, .g-cartao:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .linha td { transition: background-color .15s ease; }
+  .g-col__barra, .g-barras__barra { transition: background-color .15s ease; }
+  [data-tema-btn] i { transition: transform .35s var(--ease); }
+  [data-tema-btn]:hover i { transform: rotate(-25deg); }
+
+  /* Troca de tema suave */
+  body, .menu, .barra, .tabela, .cartao, .kpi, .g-cartao, .painel { transition: background-color .3s ease, color .3s ease, border-color .3s ease; }
+}

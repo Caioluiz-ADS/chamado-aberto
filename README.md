@@ -25,6 +25,10 @@ Os pedidos de manutenção chegavam por canais diferentes (mensagem, corredor, "
 
 O botão de tema (sol, lua ou meio círculo), na barra superior, no login e na página Sobre, alterna entre **Automático** (segue o sistema), **Claro** e **Escuro**. A escolha fica salva no navegador.
 
+Suporte e administrador têm a página **Indicadores**, com números e gráficos do período escolhido (7, 30 ou 90 dias, ou tudo): chamados abertos por dia, por status, por equipamento, tempo médio de resolução por técnico e respostas da pesquisa de satisfação. Cada gráfico tem a opção **Ver dados em tabela**.
+
+As animações são suaves e somem para quem ativa a redução de movimento no sistema.
+
 A **Planilha** continua com os campos ID, Data de Abertura, Solicitante, Setor/Andar, Equipamento, Tipo de Problema, Status e Tempo de Resolução, calcula o tempo médio e o equipamento com mais falhas, filtra por status e exporta em CSV.
 
 ## Contas de teste
@@ -89,6 +93,7 @@ chamado-aberto/
     ├── chamados.js     # Lista de chamados, planilha e CSV
     ├── painel.js       # Novo chamado e detalhe do chamado
     ├── admin.js        # Usuários, status, catálogo e auditoria
+    ├── indicadores.js  # Gráficos para suporte e administrador
     ├── sobre.js        # Página Sobre o projeto
     └── main.js         # Navegação entre as telas
 ```
