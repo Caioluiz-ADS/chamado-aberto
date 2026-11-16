@@ -54,6 +54,12 @@ docker compose up -d
 
 Abra http://localhost:8080. O servidor também mostra o endereço para abrir no celular ou em outro computador da mesma rede (o Windows pode pedir para liberar no firewall). O banco fica em `dados/chamados.db`, ou no volume `dados` no Docker. Para começar do zero, use **Restaurar exemplo** na Planilha.
 
+## Hospedando no Render
+
+O arquivo `render.yaml` já deixa tudo configurado. No [Render](https://render.com), entre com a conta do GitHub, clique em **New > Blueprint**, escolha este repositório e confirme. Em alguns minutos o site fica num endereço `https://chamado-aberto-xxxx.onrender.com`.
+
+No plano grátis, o serviço dorme depois de 15 minutos sem acesso e leva cerca de 1 minuto para acordar. Quando reinicia, os chamados voltam aos dados de exemplo. Antes de apresentar, abra o site uns minutos antes.
+
 ## Estrutura
 
 ```
@@ -62,6 +68,7 @@ chamado-aberto/
 ├── server/server.js    # Entrega o site e guarda os dados no SQLite (API /api/estado)
 ├── Dockerfile
 ├── docker-compose.yml
+├── render.yaml         # Configuração da hospedagem no Render
 ├── css/
 │   ├── base.css        # Cores, tipografia, botões e formulários
 │   ├── app.css         # Login, menu, listas, painel e administração

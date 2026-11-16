@@ -1,0 +1,8 @@
+# Hospedagem no Render (plano grátis): New > Blueprint > escolher este repositório.
+# O banco SQLite fica no disco do serviço e volta aos dados de exemplo quando ele reinicia ou dorme.
+services:
+  - type: web
+    name: chamado-aberto
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/estado
