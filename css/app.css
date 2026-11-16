@@ -292,3 +292,11 @@ form.caixa { margin-top: 16px; }
   .painel__rodape { padding-inline: 16px; }
   .notas label { font-size: 11px; }
 }
+
+/* ---------- Setor do usuário ---------- */
+.setor-celula { display: inline-flex; align-items: center; gap: 6px; }
+.setor-celula .link-btn { font-size: 16px; padding: 2px; }
+.setor-edita { display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; min-width: 220px; }
+.setor-edita .field { margin: 0; flex: 1 1 160px; }
+.setor-edita .field input { padding: 6px 10px; font-size: 14px; }
+.setor-edita .link-btn { margin-top: 8px; }

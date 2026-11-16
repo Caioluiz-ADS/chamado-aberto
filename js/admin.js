@@ -10,22 +10,42 @@ function concluirAdmin(acao, alvo, msg) {
   render();
 }
 
+let editandoSetor = null;
+
+function celulaSetor(u, i) {
+  if (editandoSetor === i) {
+    return `
+      <form class="setor-edita" data-salvar-setor="${i}" novalidate>
+        <div class="field"><label class="sr" for="eSetor${i}">Setor de ${esc(u.nome)}</label><input id="eSetor${i}" value="${esc(u.setor)}"><p class="field__error"></p></div>
+        <button class="link-btn">Salvar</button>
+        <button type="button" class="link-btn" data-cancelar-setor>Cancelar</button>
+      </form>`;
+  }
+  return `<span class="setor-celula">${u.setor ? esc(u.setor) : '<span class="muted">—</span>'}
+    <button type="button" class="link-btn" data-editar-setor="${i}" aria-label="Alterar o setor de ${esc(u.nome)}"><i class="ph ph-pencil-simple" aria-hidden="true"></i></button></span>`;
+}
+
 function paginaUsuarios(v) {
   const papeis = Object.entries(PAPEIS).map(([k, r]) => `<option value="${k}">${r}</option>`).join("");
-  v.innerHTML = cabecalho("Usuários", "Quem pode entrar no sistema e com qual perfil.", "ph-users") + avisoHtml() + `
+  const setoresUsados = [...new Set(db.usuarios.map((u) => u.setor).filter(Boolean))].sort();
+  v.innerHTML = cabecalho("Usuários", "Quem pode entrar no sistema, com qual perfil e de qual setor.", "ph-users") + avisoHtml() + `
     <form id="userForm" class="cartao form-linha" novalidate>
       <div class="field"><label for="uNome">Nome</label><input id="uNome"><p class="field__error"></p></div>
       <div class="field"><label for="uEmail">E-mail</label><input id="uEmail" type="email"><p class="field__error"></p></div>
+      <div class="field"><label for="uSetor">Setor / Andar</label><input id="uSetor" list="listaSetores" placeholder="Ex.: Financeiro, 3º andar"><p class="field__error"></p></div>
       <div class="field"><label for="uPapel">Perfil</label><select id="uPapel">${papeis}</select></div>
       <button class="btn btn--small">Adicionar</button>
+      <datalist id="listaSetores">${setoresUsados.map((s) => `<option value="${esc(s)}">`).join("")}</datalist>
     </form>
-    <p class="sheet__note">Novos usuários entram com a senha ${SENHA_PADRAO}.</p>
+    <p class="sheet__note">Novos usuários entram com a senha ${SENHA_PADRAO}. O setor já vem preenchido quando o chamado é aberto para a pessoa.</p>
     <div class="tabela">
       <table class="tabela--cartoes">
-        <thead><tr><th scope="col">Nome</th><th scope="col">E-mail</th><th scope="col">Perfil</th><th scope="col">Situação</th><th scope="col"><span class="sr">Ações</span></th></tr></thead>
+        <thead><tr><th scope="col">Nome</th><th scope="col">E-mail</th><th scope="col">Setor / Andar</th><th scope="col">Perfil</th><th scope="col">Situação</th><th scope="col"><span class="sr">Ações</span></th></tr></thead>
         <tbody>${db.usuarios.map((u, i) => `
           <tr>
-            <td data-l="Nome">${pessoa(u.nome)}</td><td data-l="E-mail">${esc(u.email)}</td><td data-l="Perfil">${PAPEIS[u.papel]}</td>
+            <td data-l="Nome">${pessoa(u.nome)}</td><td data-l="E-mail">${esc(u.email)}</td>
+            <td data-l="Setor / Andar">${celulaSetor(u, i)}</td>
+            <td data-l="Perfil">${PAPEIS[u.papel]}</td>
             <td data-l="Situação">${seloAtivo(u.ativo)}</td>
             <td data-l="Ações">${u.email === usuario.email ? '<span class="muted">Você</span>' : botaoAtivo(u.ativo, `data-u="${i}"`)}</td>
           </tr>`).join("")}
@@ -38,17 +58,36 @@ function paginaUsuarios(v) {
     u.ativo = !u.ativo;
     concluirAdmin(u.ativo ? "Ativou usuário" : "Desativou usuário", u.email, `${u.nome} ${u.ativo ? "ativado" : "desativado"}.`);
   }));
+  $$("[data-editar-setor]", v).forEach((b) => b.addEventListener("click", () => {
+    editandoSetor = Number(b.dataset.editarSetor);
+    render();
+    $(`#eSetor${editandoSetor}`).focus();
+  }));
+  $$("[data-cancelar-setor]", v).forEach((b) => b.addEventListener("click", () => { editandoSetor = null; render(); }));
+  $$("[data-salvar-setor]", v).forEach((f) => f.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const i = Number(f.dataset.salvarSetor);
+    const setor = $(`#eSetor${i}`).value.trim();
+    if (focarPrimeiro([marcarErro(`eSetor${i}`, setor ? "" : "Informe o setor.")])) return;
+    const u = db.usuarios[i];
+    editandoSetor = null;
+    if (setor === u.setor) { render(); return; }
+    u.setor = setor;
+    concluirAdmin("Alterou o setor do usuário", `${u.email}: ${setor}`, `Setor de ${u.nome} atualizado.`);
+  }));
   $("#userForm", v).addEventListener("submit", (e) => {
     e.preventDefault();
     const nome = $("#uNome").value.trim();
     const email = $("#uEmail").value.trim().toLowerCase();
+    const setor = $("#uSetor").value.trim();
     const erro = focarPrimeiro([
       marcarErro("uNome", !nome ? "Informe o nome." : db.usuarios.some((u) => u.nome === nome) ? "Já existe um usuário com esse nome." : ""),
       marcarErro("uEmail", !/^\S+@\S+\.\S+$/.test(email) ? "Informe um e-mail válido." : db.usuarios.some((u) => u.email === email) ? "Este e-mail já está cadastrado." : ""),
+      marcarErro("uSetor", setor ? "" : "Informe o setor."),
     ]);
     if (erro) return;
-    db.usuarios.push(conta(nome, email, $("#uPapel").value));
-    concluirAdmin("Criou usuário", email, `${nome} adicionado.`);
+    db.usuarios.push(conta(nome, email, $("#uPapel").value, setor));
+    concluirAdmin("Criou usuário", `${email} (${setor})`, `${nome} adicionado.`);
   });
 }
 

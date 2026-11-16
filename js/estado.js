@@ -33,10 +33,18 @@ function novoBanco() {
   };
 }
 
+// Dados salvos antes de existir o setor do usuário: completa os de exemplo pelo e-mail.
+function completar(d) {
+  d.usuarios.forEach((u) => {
+    if (u.setor === undefined) u.setor = (USUARIOS_INICIAIS.find((x) => x.email === u.email) || {}).setor || "";
+  });
+  return d;
+}
+
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) return completar(JSON.parse(raw));
   } catch (_) {}
   return novoBanco();
 }
@@ -75,7 +83,7 @@ async function enviar() {
 
 function trocarDados(resposta) {
   versao = resposta.versao;
-  db = resposta.dados;
+  db = completar(resposta.dados);
   if (usuario) usuario = db.usuarios.find((u) => u.email === usuario.email && u.ativo) || null;
 }
 
@@ -134,7 +142,8 @@ const statusDe = (nome) => db.status.find((s) => s.nome === nome) || {};
 const statusInicial = () => db.status.find((s) => s.inicial);
 const estaFinal = (c) => !!statusDe(c.status).final;
 const tecnicos = () => db.usuarios.filter((u) => u.ativo && u.papel === "suporte").map((u) => u.nome);
-const solicitantes = () => db.usuarios.filter((u) => u.ativo && u.papel === "funcionario").map((u) => u.nome);
+const setorDe = (nome) => (db.usuarios.find((u) => u.nome === nome) || {}).setor || "";
+const solicitantes = () =>db.usuarios.filter((u) => u.ativo && u.papel === "funcionario").map((u) => u.nome);
 const podeVer = (c) => ehTecnico() || c.solicitante === usuario.nome;
 const meusChamados = () => db.chamados.filter(podeVer).sort((a, b) => b.id - a.id);
 const pesquisasPendentes = () => db.chamados.filter((c) => c.solicitante === usuario.nome && estaFinal(c) && !c.pesquisa);

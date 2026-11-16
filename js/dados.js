@@ -24,21 +24,21 @@ const SENHA_PADRAO = "123456789";
 // Contas de demonstração (não é um login real)
 const CONTAS_TESTE = ["funcionarioteste@gmail.com", "suportetestes@gmail.com", "admintestes@gmail.com"];
 
-const conta = (nome, email, papel) => ({ nome, email, papel, senha: SENHA_PADRAO, ativo: true });
+const conta = (nome, email, papel, setor) => ({ nome, email, papel, setor, senha: SENHA_PADRAO, ativo: true });
 
 const USUARIOS_INICIAIS = [
-  conta("Funcionário Teste", "funcionarioteste@gmail.com", "funcionario"),
-  conta("Suporte Teste", "suportetestes@gmail.com", "suporte"),
-  conta("Administrador Teste", "admintestes@gmail.com", "admin"),
-  conta("Anderson Reis", "anderson.reis@empresa.com", "suporte"),
-  conta("Wellington Prado", "wellington.prado@empresa.com", "suporte"),
-  conta("Mariana Lopes", "mariana.lopes@empresa.com", "funcionario"),
-  conta("Rafael Brito", "rafael.brito@empresa.com", "funcionario"),
-  conta("Tainá Souza", "taina.souza@empresa.com", "funcionario"),
-  conta("Lucas Andrade", "lucas.andrade@empresa.com", "funcionario"),
-  conta("Jéssica Nunes", "jessica.nunes@empresa.com", "funcionario"),
-  conta("Diego Santana", "diego.santana@empresa.com", "funcionario"),
-  conta("Paula Cerqueira", "paula.cerqueira@empresa.com", "funcionario"),
+  conta("Funcionário Teste", "funcionarioteste@gmail.com", "funcionario", "Compras, 2º andar"),
+  conta("Suporte Teste", "suportetestes@gmail.com", "suporte", "Manutenção, subsolo"),
+  conta("Administrador Teste", "admintestes@gmail.com", "admin", "TI, 4º andar"),
+  conta("Anderson Reis", "anderson.reis@empresa.com", "suporte", "Manutenção, subsolo"),
+  conta("Wellington Prado", "wellington.prado@empresa.com", "suporte", "Manutenção, subsolo"),
+  conta("Mariana Lopes", "mariana.lopes@empresa.com", "funcionario", "Recepção, térreo"),
+  conta("Rafael Brito", "rafael.brito@empresa.com", "funcionario", "Financeiro, 3º andar"),
+  conta("Tainá Souza", "taina.souza@empresa.com", "funcionario", "RH, 2º andar"),
+  conta("Lucas Andrade", "lucas.andrade@empresa.com", "funcionario", "Almoxarifado, subsolo"),
+  conta("Jéssica Nunes", "jessica.nunes@empresa.com", "funcionario", "Comercial, 4º andar"),
+  conta("Diego Santana", "diego.santana@empresa.com", "funcionario", "TI, 4º andar"),
+  conta("Paula Cerqueira", "paula.cerqueira@empresa.com", "funcionario", "Diretoria, 5º andar"),
 ];
 
 const STATUS_INICIAIS = [

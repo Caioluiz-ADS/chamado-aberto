@@ -53,7 +53,7 @@ function painelNovo() {
         </div>
         <div class="field">
           <label for="fSetor">Setor / Andar</label>
-          <input id="fSetor" type="text" placeholder="Ex.: Financeiro, 3º andar">
+          <input id="fSetor" type="text" placeholder="Ex.: Financeiro, 3º andar" value="${tec ? "" : esc(usuario.setor || "")}">
           <p class="field__error"></p>
         </div>
         <div class="field-row">
@@ -90,6 +90,16 @@ function painelNovo() {
 
   const btnP = $("#btnPesquisa");
   if (btnP) btnP.addEventListener("click", abrirPesquisa);
+
+  // Suporte escolhe o solicitante: o setor dele entra no campo, se ninguém digitou outro.
+  let setorAuto = "";
+  if (tec) $("#fSolicitante").addEventListener("change", (e) => {
+    const campo = $("#fSetor");
+    if (campo.value.trim() && campo.value !== setorAuto) return;
+    setorAuto = setorDe(e.target.value);
+    campo.value = setorAuto;
+    marcarErro("fSetor", "");
+  });
 
   $("#fCat").addEventListener("change", (e) => {
     const k = categorias.find((x) => x.nome === e.target.value);
