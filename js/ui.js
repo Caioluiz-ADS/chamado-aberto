@@ -1,5 +1,62 @@
 // Estrutura comum das telas: menu lateral, barra superior, avisos e confirmação.
 
+/* ---------- Tema: Automático (segue o sistema), Claro ou Escuro ---------- */
+
+const TEMA_KEY = "chamado-aberto:tema";
+const TEMAS = [
+  { valor: "auto", rotulo: "Automático", icone: "ph-circle-half" },
+  { valor: "claro", rotulo: "Claro", icone: "ph-sun" },
+  { valor: "escuro", rotulo: "Escuro", icone: "ph-moon" },
+];
+
+function temaAtual() {
+  try {
+    const t = localStorage.getItem(TEMA_KEY);
+    if (TEMAS.some((x) => x.valor === t)) return t;
+  } catch (_) {}
+  return "auto";
+}
+
+function aplicarTema(t) {
+  const raiz = document.documentElement;
+  if (t === "auto") raiz.removeAttribute("data-tema"); else raiz.setAttribute("data-tema", t);
+  $('meta[name="color-scheme"]').content = t === "claro" ? "light" : t === "escuro" ? "dark" : "light dark";
+}
+
+function conteudoBotaoTema() {
+  const i = TEMAS.findIndex((x) => x.valor === temaAtual());
+  const atual = TEMAS[i];
+  const proximo = TEMAS[(i + 1) % TEMAS.length];
+  return {
+    html: `<i class="ph ${atual.icone}" aria-hidden="true"></i>`,
+    rotulo: `Tema: ${atual.rotulo}. Mudar para ${proximo.rotulo}`,
+  };
+}
+
+function botaoTema(classe = "") {
+  const { html, rotulo } = conteudoBotaoTema();
+  return `<button type="button" class="icone-btn ${classe}" data-tema-btn aria-label="${rotulo}" title="${rotulo}">${html}</button>`;
+}
+
+// Um clique em qualquer botão de tema troca para o próximo; só os botões são redesenhados.
+document.addEventListener("click", (e) => {
+  if (!e.target.closest("[data-tema-btn]")) return;
+  const i = TEMAS.findIndex((x) => x.valor === temaAtual());
+  const novo = TEMAS[(i + 1) % TEMAS.length].valor;
+  try {
+    if (novo === "auto") localStorage.removeItem(TEMA_KEY); else localStorage.setItem(TEMA_KEY, novo);
+  } catch (_) {}
+  aplicarTema(novo);
+  const { html, rotulo } = conteudoBotaoTema();
+  $$("[data-tema-btn]").forEach((b) => {
+    b.innerHTML = html;
+    b.setAttribute("aria-label", rotulo);
+    b.title = rotulo;
+  });
+});
+
+aplicarTema(temaAtual());
+
 let avisoTexto = "";
 const avisar = (t) => { avisoTexto = t; };
 
@@ -73,6 +130,7 @@ function shell(atual) {
       <div class="area">
         <header class="barra">
           <button type="button" class="icone-btn barra__menu" id="btnMenu" aria-label="Abrir menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+          ${botaoTema()}
           <a href="#/notificacoes" class="icone-btn sino" aria-label="Notificações${qtd ? `, ${qtd} não lidas` : ""}">
             <i class="ph ph-bell" aria-hidden="true"></i>${qtd ? `<span class="sino__qtd">${qtd > 9 ? "9+" : qtd}</span>` : ""}
           </a>

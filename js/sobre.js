@@ -6,7 +6,7 @@ function htmlSobre() {
       <header class="sobre__barra">
         <div class="wrap sobre__barra-in">
           <a href="#/chamados" class="brand"><img class="brand__mark" src="img/logo.svg" alt="" width="34" height="34"><span class="brand__name">Chamado Aberto</span></a>
-          <a href="#/chamados" class="btn btn--small">${usuario ? "Voltar aos chamados" : "Entrar no sistema"}</a>
+          <div class="sobre__acoes">${botaoTema()}<a href="#/chamados" class="btn btn--small">${usuario ? "Voltar aos chamados" : "Entrar no sistema"}</a></div>
         </div>
       </header>
 

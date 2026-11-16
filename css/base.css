@@ -31,8 +31,9 @@
   --ease: cubic-bezier(.16, 1, .3, 1);
 }
 
+/* Tema escuro: segue o sistema (Automático) ou é escolhido no botão de tema (data-tema no <html>). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-tema="claro"]) {
     --bg: #101216;
     --surface: #171a1f;
     --surface-2: #1f232a;
@@ -51,6 +52,27 @@
     --shadow: 0 1px 0 rgb(0 0 0 / .3), 0 16px 40px -16px rgb(0 0 0 / .6);
   }
 }
+:root[data-tema="escuro"] {
+  --bg: #101216;
+  --surface: #171a1f;
+  --surface-2: #1f232a;
+  --ink: #eceee9;
+  --ink-soft: #cfd3cc;
+  --muted: #9ca3ad;
+  --line: #2b3038;
+  --accent: #ff8a4c;
+  --accent-ink: #1a0d05;
+  --accent-soft: #3a2014;
+  --dark: #23282f;
+  --dark-ink: #eceee9;
+  --ok: #4ade80;
+  --warn: #fbbf24;
+  --danger: #f87171;
+  --shadow: 0 1px 0 rgb(0 0 0 / .3), 0 16px 40px -16px rgb(0 0 0 / .6);
+}
+:root { color-scheme: light dark; }
+:root[data-tema="claro"] { color-scheme: light; }
+:root[data-tema="escuro"] { color-scheme: dark; }
 
 *, *::before, *::after { box-sizing: border-box; }
 body {

@@ -30,6 +30,7 @@ function paginaLogin() {
         <a href="#/sobre" class="link-claro">Conheça o projeto Jovem Protagonista <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
       </section>
       <section class="login__form">
+        ${botaoTema("tema-canto")}
         <form id="loginForm" novalidate>
           <h2>Entrar</h2>
           <p class="muted">Funcionários abrem chamados. O suporte atualiza e conclui.</p>
@@ -94,6 +95,7 @@ function paginaPrimeiroAcesso() {
         <span></span>
       </section>
       <section class="login__form">
+        ${botaoTema("tema-canto")}
         <form id="primeiroForm" novalidate>
           <h2>Crie a sua senha</h2>
           <p class="muted">${esc(usuario.email)}</p>

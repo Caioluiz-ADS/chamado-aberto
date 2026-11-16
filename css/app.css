@@ -315,3 +315,8 @@ form.caixa { margin-top: 16px; }
   border-radius: var(--r-field); background: var(--surface); border: 1px solid var(--line); user-select: all;
 }
 .selos, .acoes { display: inline-flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; justify-content: flex-end; }
+
+/* ---------- Botão de tema ---------- */
+.login__form { position: relative; }
+.tema-canto { position: absolute; top: 16px; right: 16px; }
+.sobre__acoes { display: flex; align-items: center; gap: 10px; }

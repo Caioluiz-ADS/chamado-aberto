@@ -23,6 +23,8 @@ Os pedidos de manutenção chegavam por canais diferentes (mensagem, corredor, "
 | Suporte | Vê todos os chamados, define o responsável, muda o status, diz o que foi feito e abre chamado em nome de alguém |
 | Administrador | Além do suporte, cuida de usuários, status, catálogo, prazo de reabertura e auditoria |
 
+O botão de tema (sol, lua ou meio círculo), na barra superior, no login e na página Sobre, alterna entre **Automático** (segue o sistema), **Claro** e **Escuro**. A escolha fica salva no navegador.
+
 A **Planilha** continua com os campos ID, Data de Abertura, Solicitante, Setor/Andar, Equipamento, Tipo de Problema, Status e Tempo de Resolução, calcula o tempo médio e o equipamento com mais falhas, filtra por status e exporta em CSV.
 
 ## Contas de teste

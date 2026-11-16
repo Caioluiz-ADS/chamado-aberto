@@ -6,6 +6,13 @@
   <title>Chamado Aberto | Jovem Protagonista IEL</title>
   <meta name="description" content="Sistema de chamados de manutenção de elevadores e ar-condicionado. Protótipo ilustrativo do projeto Jovem Protagonista (IEL Bahia).">
   <meta name="color-scheme" content="light dark">
+  <script>
+    // Aplica o tema escolhido antes de desenhar a página, para não piscar a cor errada.
+    try {
+      var tema = localStorage.getItem("chamado-aberto:tema");
+      if (tema === "claro" || tema === "escuro") document.documentElement.setAttribute("data-tema", tema);
+    } catch (_) {}
+  </script>
   <link rel="icon" type="image/svg+xml" href="img/logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
