@@ -38,7 +38,14 @@ function esc(str) {
   return String(str ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
-const iniciais = (nome) => nome.split(" ").filter(Boolean).slice(0, 2).map((p) => p[0]).join("").toUpperCase();
+// Senha temporária: 10 caracteres sem os que se confundem (0/O, 1/l/I).
+function gerarSenhaTemporaria() {
+  const letras = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+  const sorteio = crypto.getRandomValues(new Uint32Array(10));
+  return [...sorteio].map((n) => letras[n % letras.length]).join("");
+}
+
+const iniciais =(nome) => nome.split(" ").filter(Boolean).slice(0, 2).map((p) => p[0]).join("").toUpperCase();
 
 function opcoes(lista, atual = "", vazio = "Selecione") {
   return `<option value="">${esc(vazio)}</option>` + lista.map((v) => `<option ${v === atual ? "selected" : ""}>${esc(v)}</option>`).join("");

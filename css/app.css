@@ -300,3 +300,18 @@ form.caixa { margin-top: 16px; }
 .setor-edita .field { margin: 0; flex: 1 1 160px; }
 .setor-edita .field input { padding: 6px 10px; font-size: 14px; }
 .setor-edita .link-btn { margin-top: 8px; }
+
+/* ---------- Senha temporária ---------- */
+.senha-gerada {
+  display: flex; gap: 14px; padding: 18px; margin-bottom: 16px;
+  border: 1.5px solid var(--accent); border-radius: 12px; background: var(--accent-soft);
+}
+.senha-gerada > i { font-size: 26px; color: var(--accent); }
+.senha-gerada h2 { font-size: 17px; margin-bottom: 6px; }
+.senha-gerada p { font-size: 14.5px; }
+.senha-gerada__linha { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+.senha-gerada code {
+  font: 500 20px/1 var(--mono); letter-spacing: .06em; padding: 10px 14px;
+  border-radius: var(--r-field); background: var(--surface); border: 1px solid var(--line); user-select: all;
+}
+.selos, .acoes { display: inline-flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; justify-content: flex-end; }

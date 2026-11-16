@@ -11,6 +11,33 @@ function concluirAdmin(acao, alvo, msg) {
 }
 
 let editandoSetor = null;
+let senhaGerada = null;
+
+// Mostrada uma vez, logo depois de criar o usuário ou gerar uma senha nova.
+function caixaSenhaGerada() {
+  if (!senhaGerada) return "";
+  const { nome, email, senha } = senhaGerada;
+  return `
+    <section class="senha-gerada" role="status">
+      <i class="ph ph-key" aria-hidden="true"></i>
+      <div>
+        <h2>Senha temporária de ${esc(nome)}</h2>
+        <p>Passe para a pessoa junto com o e-mail <strong>${esc(email)}</strong>. No primeiro acesso, ela vai criar a própria senha. Esta senha não aparece de novo.</p>
+        <div class="senha-gerada__linha">
+          <code id="senhaTemp">${esc(senha)}</code>
+          <button type="button" class="btn btn--small" id="btnCopiarSenha"><i class="ph-bold ph-copy" aria-hidden="true"></i> Copiar</button>
+          <button type="button" class="link-btn" id="btnFecharSenha">Já anotei</button>
+        </div>
+      </div>
+    </section>`;
+}
+
+function definirSenhaTemporaria(u) {
+  const senha = gerarSenhaTemporaria();
+  u.senha = senha;
+  u.trocarSenha = true;
+  senhaGerada = { nome: u.nome, email: u.email, senha };
+}
 
 function celulaSetor(u, i) {
   if (editandoSetor === i) {
@@ -28,7 +55,7 @@ function celulaSetor(u, i) {
 function paginaUsuarios(v) {
   const papeis = Object.entries(PAPEIS).map(([k, r]) => `<option value="${k}">${r}</option>`).join("");
   const setoresUsados = [...new Set(db.usuarios.map((u) => u.setor).filter(Boolean))].sort();
-  v.innerHTML = cabecalho("Usuários", "Quem pode entrar no sistema, com qual perfil e de qual setor.", "ph-users") + avisoHtml() + `
+  v.innerHTML = cabecalho("Usuários", "Quem pode entrar no sistema, com qual perfil e de qual setor.", "ph-users") + avisoHtml() + caixaSenhaGerada() + `
     <form id="userForm" class="cartao form-linha" novalidate>
       <div class="field"><label for="uNome">Nome</label><input id="uNome"><p class="field__error"></p></div>
       <div class="field"><label for="uEmail">E-mail</label><input id="uEmail" type="email"><p class="field__error"></p></div>
@@ -37,7 +64,7 @@ function paginaUsuarios(v) {
       <button class="btn btn--small">Adicionar</button>
       <datalist id="listaSetores">${setoresUsados.map((s) => `<option value="${esc(s)}">`).join("")}</datalist>
     </form>
-    <p class="sheet__note">Novos usuários entram com a senha ${SENHA_PADRAO}. O setor já vem preenchido quando o chamado é aberto para a pessoa.</p>
+    <p class="sheet__note">Ao adicionar, o sistema gera uma senha temporária; a pessoa cria a própria senha no primeiro acesso. O setor já vem preenchido quando o chamado é aberto para ela.</p>
     <div class="tabela">
       <table class="tabela--cartoes">
         <thead><tr><th scope="col">Nome</th><th scope="col">E-mail</th><th scope="col">Setor / Andar</th><th scope="col">Perfil</th><th scope="col">Situação</th><th scope="col"><span class="sr">Ações</span></th></tr></thead>
@@ -46,8 +73,8 @@ function paginaUsuarios(v) {
             <td data-l="Nome">${pessoa(u.nome)}</td><td data-l="E-mail">${esc(u.email)}</td>
             <td data-l="Setor / Andar">${celulaSetor(u, i)}</td>
             <td data-l="Perfil">${PAPEIS[u.papel]}</td>
-            <td data-l="Situação">${seloAtivo(u.ativo)}</td>
-            <td data-l="Ações">${u.email === usuario.email ? '<span class="muted">Você</span>' : botaoAtivo(u.ativo, `data-u="${i}"`)}</td>
+            <td data-l="Situação"><span class="selos">${seloAtivo(u.ativo)}${u.trocarSenha ? '<span class="status status--pausa">Aguardando 1º acesso</span>' : ""}</span></td>
+            <td data-l="Ações">${u.email === usuario.email ? '<span class="muted">Você</span>' : `<span class="acoes">${botaoAtivo(u.ativo, `data-u="${i}"`)}<button class="link-btn" data-nova-senha="${i}">Nova senha</button></span>`}</td>
           </tr>`).join("")}
         </tbody>
       </table>
@@ -57,6 +84,24 @@ function paginaUsuarios(v) {
     const u = db.usuarios[b.dataset.u];
     u.ativo = !u.ativo;
     concluirAdmin(u.ativo ? "Ativou usuário" : "Desativou usuário", u.email, `${u.nome} ${u.ativo ? "ativado" : "desativado"}.`);
+  }));
+  const copiar = $("#btnCopiarSenha", v);
+  if (copiar) copiar.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(senhaGerada.senha);
+      copiar.innerHTML = '<i class="ph-bold ph-check" aria-hidden="true"></i> Copiada';
+    } catch (_) {
+      getSelection().selectAllChildren($("#senhaTemp"));
+      copiar.textContent = "Selecionada: Ctrl+C";
+    }
+  });
+  const fecharSenha = $("#btnFecharSenha", v);
+  if (fecharSenha) fecharSenha.addEventListener("click", () => { senhaGerada = null; render(); });
+  $$("[data-nova-senha]", v).forEach((b) => b.addEventListener("click", async () => {
+    const u = db.usuarios[b.dataset.novaSenha];
+    if (!await confirmar(`Gerar uma nova senha para ${u.nome}?`, "A senha atual deixa de funcionar. A pessoa entra com a senha temporária e cria uma nova no primeiro acesso.", "Gerar senha")) return;
+    definirSenhaTemporaria(u);
+    concluirAdmin("Gerou senha temporária", u.email, "");
   }));
   $$("[data-editar-setor]", v).forEach((b) => b.addEventListener("click", () => {
     editandoSetor = Number(b.dataset.editarSetor);
@@ -86,7 +131,9 @@ function paginaUsuarios(v) {
       marcarErro("uSetor", setor ? "" : "Informe o setor."),
     ]);
     if (erro) return;
-    db.usuarios.push(conta(nome, email, $("#uPapel").value, setor));
+    const novo = conta(nome, email, $("#uPapel").value, setor);
+    definirSenhaTemporaria(novo);
+    db.usuarios.push(novo);
     concluirAdmin("Criou usuário", `${email} (${setor})`, `${nome} adicionado.`);
   });
 }

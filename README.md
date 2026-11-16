@@ -38,6 +38,8 @@ A **Planilha** continua com os campos ID, Data de Abertura, Solicitante, Setor/A
 3. Volte como **funcionário** e responda a pesquisa de satisfação.
 4. Em **Planilha**, use **Baixar CSV** para abrir no Excel, ou **Restaurar exemplo** para recomeçar.
 
+Quando o administrador cadastra alguém em **Usuários**, o sistema gera uma **senha temporária** e mostra uma única vez. No primeiro acesso, a pessoa é levada a criar a própria senha antes de usar o sistema. Se alguém esquecer a senha, o administrador usa **Nova senha** na lista de usuários.
+
 > O login é uma simulação para apresentação. Não use senhas reais.
 
 ## Rodando com banco de dados

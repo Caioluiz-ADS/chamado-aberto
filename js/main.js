@@ -33,8 +33,15 @@ function render() {
     paginaLogin();
     return;
   }
+  if (usuario.trocarSenha) {
+    fecharJanelas();
+    if (rota !== "primeiro-acesso") { location.hash = "#/primeiro-acesso"; return; }
+    if (!$("#primeiroForm")) paginaPrimeiroAcesso();
+    return;
+  }
 
   let chave = rotaEhPainel() ? "chamados" : rota;
+  if (chave !== "admin/usuarios") senhaGerada = null;
   const restrita = chave.startsWith("admin/") && !ehAdmin();
   if (!PAGINAS[chave] || restrita) {
     location.hash = "#/chamados";

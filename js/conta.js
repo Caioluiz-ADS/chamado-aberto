@@ -9,6 +9,7 @@ function entrar(email) {
 
 function sair() {
   usuario = null;
+  senhaGerada = null;
   pesquisasVistas.clear();
   try { sessionStorage.removeItem(SESSION_KEY); } catch (_) {}
   location.hash = "#/login";
@@ -73,9 +74,62 @@ function paginaLogin() {
     marcarErro("lSenha", msg);
     if (msg) { (email ? $("#lSenha") : $("#lEmail")).focus(); return; }
     entrar(achado.email);
-    auditar("Entrou no sistema", achado.email);
+    auditar(achado.trocarSenha ? "Entrou com senha temporária" : "Entrou no sistema", achado.email);
     save();
-    if (location.hash === "#/chamados") render(); else location.hash = "#/chamados";
+    const destino = achado.trocarSenha ? "#/primeiro-acesso" : "#/chamados";
+    if (location.hash === destino) render(); else location.hash = destino;
+  });
+}
+
+// Primeiro acesso (ou senha temporária nova): a pessoa só usa o sistema depois de criar a própria senha.
+function paginaPrimeiroAcesso() {
+  $("#app").innerHTML = `
+    <main class="login">
+      <section class="login__marca">
+        <span class="brand"><img class="brand__mark" src="img/logo.svg" alt="" width="34" height="34"><span class="brand__name">Chamado Aberto</span></span>
+        <div>
+          <h1>Boas-vindas, <em>${esc(usuario.nome.split(" ")[0])}.</em></h1>
+          <p>Antes de começar, crie a sua senha. A senha temporária que você recebeu deixa de funcionar.</p>
+        </div>
+        <span></span>
+      </section>
+      <section class="login__form">
+        <form id="primeiroForm" novalidate>
+          <h2>Crie a sua senha</h2>
+          <p class="muted">${esc(usuario.email)}</p>
+          <div class="field">
+            <label for="pNova">Nova senha</label>
+            <input id="pNova" type="password" autocomplete="new-password" aria-describedby="pDica">
+            <p class="sheet__note" id="pDica">Pelo menos 8 caracteres.</p>
+            <p class="field__error"></p>
+          </div>
+          <div class="field">
+            <label for="pRepete">Repita a nova senha</label>
+            <input id="pRepete" type="password" autocomplete="new-password">
+            <p class="field__error"></p>
+          </div>
+          <button class="btn btn--full">Salvar e entrar <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></button>
+          <button type="button" class="link-btn" id="pSair" style="margin-top:16px"><i class="ph ph-sign-out" aria-hidden="true"></i> Sair</button>
+        </form>
+      </section>
+    </main>`;
+  $("#pNova").focus();
+  $("#pSair").addEventListener("click", sair);
+  $("#primeiroForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const nova = $("#pNova").value;
+    const erro = focarPrimeiro([
+      marcarErro("pNova", nova.length < 8 ? "Use pelo menos 8 caracteres."
+        : nova === usuario.senha ? "Escolha uma senha diferente da temporária." : ""),
+      marcarErro("pRepete", nova === $("#pRepete").value ? "" : "As senhas não são iguais."),
+    ]);
+    if (erro) return;
+    usuario.senha = nova;
+    delete usuario.trocarSenha;
+    auditar("Criou a própria senha", usuario.email);
+    save();
+    avisar("Senha criada. Pronto para usar o sistema.");
+    location.hash = "#/chamados";
   });
 }
 
