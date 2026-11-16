@@ -16,45 +16,49 @@ function sair() {
   render();
 }
 
+// Tela de entrada: uma coluna só, no meio da tela, com a fumaça que segue o mouse no fundo.
+function telaLogin(cabeca, formulario, rodape) {
+  return `
+    <main class="login">
+      <canvas class="fumaca" aria-hidden="true"></canvas>
+      <div class="login__cantos">${botaoAnimacoes()}${botaoTema()}</div>
+      <section class="login__centro">
+        <span class="brand"><img class="brand__mark" src="img/logo.svg" alt="" width="40" height="40"><span class="brand__name">Chamado Aberto</span></span>
+        <div class="login__cabeca">${cabeca}</div>
+        ${formulario}
+        ${rodape}
+      </section>
+    </main>`;
+}
+
 function paginaLogin() {
   const contas = CONTAS_TESTE.map((email) => db.usuarios.find((u) => u.email === email)).filter(Boolean);
   const icones = { funcionario: "ph-user", suporte: "ph-wrench", admin: "ph-gear" };
-  $("#app").innerHTML = `
-    <main class="login">
-      <section class="login__marca">
-        <span class="brand"><img class="brand__mark" src="img/logo.svg" alt="" width="34" height="34"><span class="brand__name">Chamado Aberto</span></span>
-        <div>
-          <h1>O elevador parou. <em>Quem ficou sabendo?</em></h1>
-          <p>Todos os chamados de manutenção de elevadores e ar-condicionado num só lugar.</p>
+  $("#app").innerHTML = telaLogin(`
+      <h1>${tituloRotativo()} <em>Quem ficou sabendo?</em></h1>
+      <p class="login__sub">Todos os chamados de manutenção num só lugar.</p>`, `
+      <form id="loginForm" class="login__cartao" novalidate>
+        <h2>Entrar</h2>
+        <p class="muted">Funcionários abrem chamados. O suporte atualiza e conclui.</p>
+        <div class="field">
+          <label for="lEmail">E-mail</label>
+          <input id="lEmail" type="email" autocomplete="username" placeholder="nome@empresa.com">
         </div>
-        <a href="#/sobre" class="link-claro">Conheça o projeto Jovem Protagonista <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
-      </section>
-      <section class="login__form">
-        ${botaoTema("tema-canto")}
-        <form id="loginForm" novalidate>
-          <h2>Entrar</h2>
-          <p class="muted">Funcionários abrem chamados. O suporte atualiza e conclui.</p>
-          <div class="field">
-            <label for="lEmail">E-mail</label>
-            <input id="lEmail" type="email" autocomplete="username" placeholder="nome@empresa.com">
-          </div>
-          <div class="field">
-            <label for="lSenha">Senha</label>
-            <input id="lSenha" type="password" autocomplete="current-password">
-            <p class="field__error" id="eLogin"></p>
-          </div>
-          <button type="submit" class="btn btn--full">Entrar <i class="ph-bold ph-sign-in" aria-hidden="true"></i></button>
-          <div class="demo">
-            <p class="demo__title">Contas de teste (clique para preencher)</p>
-            ${contas.map((c) => `
-              <button type="button" class="demo__acc" data-email="${esc(c.email)}">
-                <i class="ph ${icones[c.papel]}" aria-hidden="true"></i>
-                <span><strong>${PAPEIS[c.papel]}</strong> ${esc(c.email)}</span>
-              </button>`).join("")}
-          </div>
-        </form>
-      </section>
-    </main>`;
+        <div class="field">
+          <label for="lSenha">Senha</label>
+          <input id="lSenha" type="password" autocomplete="current-password">
+          <p class="field__error" id="eLogin"></p>
+        </div>
+        <button type="submit" class="btn btn--full">Entrar <i class="ph-bold ph-sign-in" aria-hidden="true"></i></button>
+        <div class="demo">
+          <p class="demo__title">Contas de teste (clique para preencher)</p>
+          ${contas.map((c) => `
+            <button type="button" class="demo__acc" data-email="${esc(c.email)}">
+              <i class="ph ${icones[c.papel]}" aria-hidden="true"></i>
+              <span><strong>${PAPEIS[c.papel]}</strong> ${esc(c.email)}</span>
+            </button>`).join("")}
+        </div>
+      </form>`, `<a href="#/sobre" class="login__sobre">Conheça o projeto Jovem Protagonista <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>`);
 
   $$("[data-email]").forEach((b) => b.addEventListener("click", () => {
     const c = db.usuarios.find((u) => u.email === b.dataset.email);
@@ -84,37 +88,25 @@ function paginaLogin() {
 
 // Primeiro acesso (ou senha temporária nova): a pessoa só usa o sistema depois de criar a própria senha.
 function paginaPrimeiroAcesso() {
-  $("#app").innerHTML = `
-    <main class="login">
-      <section class="login__marca">
-        <span class="brand"><img class="brand__mark" src="img/logo.svg" alt="" width="34" height="34"><span class="brand__name">Chamado Aberto</span></span>
-        <div>
-          <h1>Boas-vindas, <em>${esc(usuario.nome.split(" ")[0])}.</em></h1>
-          <p>Antes de começar, crie a sua senha. A senha temporária que você recebeu deixa de funcionar.</p>
+  $("#app").innerHTML = telaLogin(`
+      <h1>Boas-vindas, <em>${esc(usuario.nome.split(" ")[0])}.</em></h1>
+      <p class="login__sub">Antes de começar, crie a sua senha. A senha temporária que você recebeu deixa de funcionar.</p>`, `
+      <form id="primeiroForm" class="login__cartao" novalidate>
+        <h2>Crie a sua senha</h2>
+        <p class="muted">${esc(usuario.email)}</p>
+        <div class="field">
+          <label for="pNova">Nova senha</label>
+          <input id="pNova" type="password" autocomplete="new-password" aria-describedby="pDica">
+          <p class="sheet__note" id="pDica">Pelo menos 8 caracteres.</p>
+          <p class="field__error"></p>
         </div>
-        <span></span>
-      </section>
-      <section class="login__form">
-        ${botaoTema("tema-canto")}
-        <form id="primeiroForm" novalidate>
-          <h2>Crie a sua senha</h2>
-          <p class="muted">${esc(usuario.email)}</p>
-          <div class="field">
-            <label for="pNova">Nova senha</label>
-            <input id="pNova" type="password" autocomplete="new-password" aria-describedby="pDica">
-            <p class="sheet__note" id="pDica">Pelo menos 8 caracteres.</p>
-            <p class="field__error"></p>
-          </div>
-          <div class="field">
-            <label for="pRepete">Repita a nova senha</label>
-            <input id="pRepete" type="password" autocomplete="new-password">
-            <p class="field__error"></p>
-          </div>
-          <button class="btn btn--full">Salvar e entrar <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></button>
-          <button type="button" class="link-btn" id="pSair" style="margin-top:16px"><i class="ph ph-sign-out" aria-hidden="true"></i> Sair</button>
-        </form>
-      </section>
-    </main>`;
+        <div class="field">
+          <label for="pRepete">Repita a nova senha</label>
+          <input id="pRepete" type="password" autocomplete="new-password">
+          <p class="field__error"></p>
+        </div>
+        <button class="btn btn--full">Salvar e entrar <i class="ph-bold ph-arrow-right" aria-hidden="true"></i></button>
+      </form>`, `<button type="button" class="login__sobre link-btn" id="pSair"><i class="ph ph-sign-out" aria-hidden="true"></i> Sair</button>`);
   $("#pNova").focus();
   $("#pSair").addEventListener("click", sair);
   $("#primeiroForm").addEventListener("submit", (e) => {

@@ -179,6 +179,12 @@ a { color: inherit; }
 }
 .link-btn:hover:not([disabled]) { color: var(--accent); }
 .muted { color: var(--muted); }
+/* Palavra que troca no título: sublinhado desenhado pelo fundo, para poder animar letra por letra. */
+.troca {
+  display: inline-block; padding-bottom: .04em;
+  background: linear-gradient(var(--accent), var(--accent)) left 100% / 100% .08em no-repeat;
+}
+.troca .l { display: inline-block; white-space: pre; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 @media (max-width: 560px) {

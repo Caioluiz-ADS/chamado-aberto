@@ -91,6 +91,7 @@ chamado-aberto/
     ├── estado.js       # Dados (servidor ou navegador) e regras dos chamados
     ├── ui.js           # Menu, barra superior, avisos e confirmação
     ├── conta.js        # Login, notificações, senha e pesquisa de satisfação
+    ├── fumaca.js       # Fumaça que segue o mouse na tela de entrada
     ├── chamados.js     # Lista de chamados, planilha e CSV
     ├── painel.js       # Novo chamado e detalhe do chamado
     ├── admin.js        # Usuários, status, catálogo e auditoria

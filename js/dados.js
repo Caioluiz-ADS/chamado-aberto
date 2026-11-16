@@ -53,6 +53,12 @@ const CATALOGO_INICIAL = [
   { nome: "Ar-condicionado", ativo: true, servicos: [{ nome: "Ar-condicionado", ativo: true }] },
 ];
 
+// Equipamentos que se revezam no título da tela inicial ("___ parou."), com o artigo certo.
+const EQUIPAMENTOS_TITULO = [
+  "O elevador", "O monitor", "O ar-condicionado", "O e-mail", "A impressora",
+  "A internet", "O computador", "O projetor", "O Wi-Fi", "O telefone",
+];
+
 const TIPOS = ["Não liga", "Ruído anormal", "Travamento", "Vazamento", "Temperatura irregular", "Outro"];
 
 // Avaliações da pesquisa de satisfação

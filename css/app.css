@@ -1,20 +1,30 @@
 /* Sistema de chamados: login, menu, listas, painel do chamado e administração. */
 
 /* ---------- Login ---------- */
-.login { min-height: 100dvh; display: grid; grid-template-columns: 1.1fr 1fr; }
-.login__marca {
-  background: var(--dark); color: var(--dark-ink);
-  padding: 40px clamp(24px, 5vw, 72px);
-  display: flex; flex-direction: column; justify-content: space-between; gap: 40px;
+.login {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: 100dvh; display: grid; place-items: center;
+  padding: 72px 16px 40px; background: var(--bg);
 }
-.login__marca h1 { font-size: clamp(36px, 4.6vw, 64px); font-weight: 800; letter-spacing: -.03em; line-height: 1.02; }
-.login__marca em { display: block; font-weight: 600; color: var(--accent); }
-.login__marca p { margin-top: 20px; font-size: 18px; max-width: 42ch; color: color-mix(in srgb, var(--dark-ink) 72%, transparent); }
-.link-claro { color: var(--dark-ink); font-size: 15px; font-weight: 600; display: inline-flex; gap: 8px; align-items: center; }
-.login__form { display: grid; place-items: center; padding: 40px 16px; }
-#loginForm { width: min(400px, 100%); }
-#loginForm h2 { font-size: 30px; margin-bottom: 6px; }
-#loginForm .muted { margin-bottom: 24px; font-size: 15px; }
+.fumaca { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.login__cantos { position: absolute; top: 14px; right: 14px; display: flex; gap: 4px; }
+.login__centro { width: min(720px, 100%); display: flex; flex-direction: column; align-items: center; text-align: center; }
+.login__centro .brand { margin-bottom: 26px; }
+.login__centro .brand__mark { width: 40px; height: 40px; }
+.login__centro .brand__name { font-size: 19px; }
+.login__cabeca h1 { font-size: clamp(34px, 5.4vw, 60px); font-weight: 800; letter-spacing: -.03em; line-height: 1.06; }
+.login__cabeca h1 em { display: block; font-weight: 600; color: var(--accent); }
+.login__sub { margin: 14px auto 0; max-width: 42ch; font-size: 17px; color: var(--muted); }
+.login__cartao {
+  width: min(420px, 100%); margin-top: 30px; padding: 26px; text-align: left;
+  border-radius: 18px; border: 1px solid var(--line); box-shadow: var(--shadow);
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+}
+.login__cartao h2 { font-size: 24px; margin-bottom: 4px; }
+.login__cartao > .muted { margin-bottom: 20px; font-size: 14.5px; }
+.login__sobre { margin-top: 22px; display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; color: var(--ink-soft); }
+.login__sobre:hover { color: var(--accent); }
 .demo { margin-top: 24px; padding-top: 18px; border-top: 1px dashed var(--line); display: grid; gap: 8px; }
 .demo__title { font-size: 13px; font-weight: 600; color: var(--muted); }
 .demo__acc {
@@ -267,8 +277,7 @@ form.caixa { margin-top: 16px; }
   .barra { padding: 10px 16px; }
   .barra__menu { display: grid; }
   .pagina { padding: 20px 16px 48px; }
-  .login { grid-template-columns: 1fr; }
-  .login__marca p { font-size: 16px; }
+  .login__sub { font-size: 16px; }
 }
 @media (max-width: 760px) {
   .tabela--cartoes thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
@@ -317,8 +326,6 @@ form.caixa { margin-top: 16px; }
 .selos, .acoes { display: inline-flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; justify-content: flex-end; }
 
 /* ---------- Botão de tema ---------- */
-.login__form { position: relative; }
-.tema-canto { position: absolute; top: 16px; right: 16px; }
 .sobre__acoes { display: flex; align-items: center; gap: 10px; }
 
 /* ---------- Indicadores ---------- */

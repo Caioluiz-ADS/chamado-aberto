@@ -15,7 +15,7 @@ function htmlSobre() {
           <div class="wrap hero__grid">
             <div>
               <p class="eyebrow">Projeto Jovem Protagonista · IEL Bahia</p>
-              <h1>O elevador parou. <em>Quem ficou sabendo?</em></h1>
+              <h1>${tituloRotativo()} <em>Quem ficou sabendo?</em></h1>
               <p class="lead">Criamos uma planilha que junta todos os chamados de manutenção num só lugar, para ninguém mais esperar sem resposta.</p>
             </div>
           </div>

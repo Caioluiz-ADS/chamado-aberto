@@ -93,6 +93,42 @@ document.addEventListener("click", (e) => {
   if (ligar) { entradaForcada = true; render(); }
 });
 
+/* ---------- Título da tela inicial: o equipamento troca a cada 3 segundos ---------- */
+
+let trocaTimer = null;
+
+// Cada letra num <span> próprio, para sumir e entrar uma de cada vez.
+const letras = (palavra) => Array.from(palavra).map((ch, i) => `<span class="l" style="--i:${i}">${esc(ch)}</span>`).join("");
+
+// O leitor de tela ouve uma frase fixa; a palavra que troca fica só na tela.
+function tituloRotativo() {
+  return `<span class="sr">Um equipamento parou.</span><span aria-hidden="true"><span class="troca" data-troca>${letras(EQUIPAMENTOS_TITULO[0])}</span> parou.</span>`;
+}
+
+function iniciarTrocaTitulo() {
+  clearInterval(trocaTimer);
+  const el = $("[data-troca]");
+  if (!el) return;
+  let i = 0;
+  trocaTimer = setInterval(() => {
+    if (!el.isConnected) { clearInterval(trocaTimer); return; }
+    i = (i + 1) % EQUIPAMENTOS_TITULO.length;
+    const nova = EQUIPAMENTOS_TITULO[i];
+    if (!animacoesLigadas()) { el.innerHTML = letras(nova); return; }
+    // Sai: letras sobem e se desfazem uma a uma; depois as da próxima palavra entram.
+    const saida = 400 + el.querySelectorAll(".l").length * 28;
+    el.classList.remove("troca--entrando");
+    el.classList.add("troca--saindo");
+    setTimeout(() => {
+      if (!el.isConnected) return;
+      el.innerHTML = letras(nova);
+      el.classList.remove("troca--saindo");
+      void el.offsetWidth;
+      el.classList.add("troca--entrando");
+    }, saida);
+  }, 3000);
+}
+
 // Números dos cartões contam de zero até o valor (só números inteiros ou porcentagens).
 function contarNumeros(raiz) {
   if (!animacoesLigadas()) return;

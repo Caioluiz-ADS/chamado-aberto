@@ -29,6 +29,7 @@ function render() {
     fecharJanelas();
     $("#app").innerHTML = htmlSobre();
     revelarAoRolar($("#app"));
+    iniciarTrocaTitulo();
     window.scrollTo(0, 0);
     return;
   }
@@ -36,12 +37,14 @@ function render() {
     fecharJanelas();
     if (rota !== "login") { location.hash = "#/login"; return; }
     paginaLogin();
+    iniciarTrocaTitulo();
+    iniciarFumaca();
     return;
   }
   if (usuario.trocarSenha) {
     fecharJanelas();
     if (rota !== "primeiro-acesso") { location.hash = "#/primeiro-acesso"; return; }
-    if (!$("#primeiroForm")) paginaPrimeiroAcesso();
+    if (!$("#primeiroForm")) { paginaPrimeiroAcesso(); iniciarFumaca(); }
     return;
   }
 

@@ -40,29 +40,41 @@
 .entrando .g-barras__barra { transform-origin: left; animation-name: crescerX; animation-delay: calc(300ms + var(--n) * 70ms); }
 
 /* ---------- Login e primeiro acesso ---------- */
-.login__marca { position: relative; overflow: hidden; isolation: isolate; }
-.login__marca::before, .login__marca::after {
-  content: ""; position: absolute; z-index: -1; border-radius: 50%; pointer-events: none;
-  filter: blur(40px); opacity: .55;
+/* Dois brilhos laranja se movendo devagar no fundo */
+.login::before, .login::after {
+  content: ""; position: absolute; z-index: -2; border-radius: 50%; pointer-events: none;
+  filter: blur(50px); opacity: .45;
 }
-.login__marca::before {
-  width: 60%; aspect-ratio: 1; right: -15%; top: -20%;
+.login::before {
+  width: min(70vw, 700px); aspect-ratio: 1; right: -18%; top: -25%;
   background: radial-gradient(circle, var(--accent) 0%, transparent 65%);
   animation: vagar 16s ease-in-out infinite alternate;
 }
-.login__marca::after {
-  width: 45%; aspect-ratio: 1; left: -10%; bottom: -15%;
+.login::after {
+  width: min(55vw, 520px); aspect-ratio: 1; left: -15%; bottom: -20%;
   background: radial-gradient(circle, color-mix(in srgb, var(--accent) 70%, #f59e0b) 0%, transparent 65%);
   animation: vagar 20s ease-in-out infinite alternate-reverse;
 }
-.login__marca .brand__mark { animation: flutuar 3.2s ease-in-out infinite; }
-.login__marca > div { animation: subir .7s var(--ease) both; animation-delay: 100ms; }
-.login__marca h1 em { animation: subir .7s var(--ease) both; animation-delay: 350ms; }
-.login__form form { animation: subir .6s var(--ease) both; animation-delay: 150ms; }
+.login__centro .brand__mark { animation: flutuar 3.2s ease-in-out infinite; }
+.login__cabeca, .login__cartao, .login__sobre { animation: subir .7s var(--ease) both; }
+.login__cabeca h1 em { animation: subir .7s var(--ease) both; animation-delay: 300ms; }
+.login__cartao { animation-delay: 180ms; }
+.login__sobre { animation-delay: 420ms; }
 .demo__acc { animation: subir .5s var(--ease) both; }
-.demo__acc:nth-of-type(1) { animation-delay: 350ms; }
-.demo__acc:nth-of-type(2) { animation-delay: 420ms; }
-.demo__acc:nth-of-type(3) { animation-delay: 490ms; }
+.demo__acc:nth-of-type(1) { animation-delay: 380ms; }
+.demo__acc:nth-of-type(2) { animation-delay: 450ms; }
+.demo__acc:nth-of-type(3) { animation-delay: 520ms; }
+
+/* Título: as letras da palavra somem uma a uma (sobem e se desfazem) e as da próxima entram */
+@keyframes letraSai { to { opacity: 0; transform: translateY(-.55em) rotate(-10deg) scale(.8); filter: blur(6px); } }
+@keyframes letraEntra { from { opacity: 0; transform: translateY(.6em) scale(.85); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes sublinhar { from { background-size: 0% .08em; } to { background-size: 100% .08em; } }
+.troca { transition: background-size .35s ease-in; }
+.troca--saindo { background-size: 0% .08em; }
+.troca--saindo .l { animation: letraSai .4s ease-in forwards; animation-delay: calc(var(--i) * 28ms); }
+/* Propriedades separadas: o atalho com var() junto de um atraso próprio é descartado pelo navegador. */
+.troca--entrando .l { animation-name: letraEntra; animation-duration: .55s; animation-timing-function: var(--ease); animation-fill-mode: both; animation-delay: calc(var(--i) * 35ms); }
+.troca--entrando { animation-name: sublinhar; animation-duration: .6s; animation-timing-function: var(--ease); animation-fill-mode: both; animation-delay: .15s; }
 
 /* ---------- Painel, janelas e fundo ---------- */
 .painel[open] { animation: deslizar .38s var(--ease); }
@@ -115,7 +127,7 @@ dialog[open]::backdrop { animation: surgir .3s ease; }
 .field input, .field select, .field textarea { transition: border-color .2s ease, box-shadow .2s ease; }
 
 /* Troca de tema suave */
-body, .menu, .barra, .tabela, .cartao, .kpi, .g-cartao, .painel, .login__form { transition: background-color .35s ease, color .35s ease, border-color .35s ease; }
+body, .menu, .barra, .tabela, .cartao, .kpi, .g-cartao, .painel, .login__cartao { transition: background-color .35s ease, color .35s ease, border-color .35s ease; }
 
 /* ---------- Página Sobre: blocos aparecem ao rolar ---------- */
 .revelar { opacity: 0; transform: translateY(28px); transition: opacity .8s var(--ease), transform .8s var(--ease); transition-delay: var(--d, 0ms); }
@@ -137,5 +149,6 @@ body, .menu, .barra, .tabela, .cartao, .kpi, .g-cartao, .painel, .login__form { 
   transition: none !important;
 }
 :root[data-animacoes="desligadas"] .revelar { opacity: 1; transform: none; }
-:root[data-animacoes="desligadas"] .login__marca::before,
-:root[data-animacoes="desligadas"] .login__marca::after { display: none; }
+:root[data-animacoes="desligadas"] .login::before,
+:root[data-animacoes="desligadas"] .login::after,
+:root[data-animacoes="desligadas"] .fumaca { display: none; }
