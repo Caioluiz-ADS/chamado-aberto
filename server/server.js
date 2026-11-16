@@ -133,7 +133,12 @@ http.createServer((req, res) => {
   arquivo(req, res);
 }).listen(PORTA, () => {
   console.log(`Chamado Aberto em http://localhost:${PORTA}`);
-  const ips = Object.values(os.networkInterfaces()).flat().filter((i) => i && i.family === "IPv4" && !i.internal);
-  ips.forEach((i) => console.log(`Na mesma rede (celular, outro PC): http://${i.address}:${PORTA}`));
+  if (fs.existsSync("/.dockerenv")) {
+    // Dentro do contêiner, o IP da placa é interno do Docker e não abre em outro aparelho.
+    console.log(`Na mesma rede (celular, outro PC): use o IP deste computador, por exemplo http://192.168.x.x:${PORTA}`);
+  } else {
+    const ips = Object.values(os.networkInterfaces()).flat().filter((i) => i && i.family === "IPv4" && !i.internal);
+    ips.forEach((i) => console.log(`Na mesma rede (celular, outro PC): http://${i.address}:${PORTA}`));
+  }
   console.log(`Banco: ${DB_PATH}`);
 });
