@@ -69,10 +69,12 @@ $("#painel").addEventListener("click", (e) => {
 
 window.addEventListener("hashchange", render);
 
-try {
-  const salvo = sessionStorage.getItem(SESSION_KEY);
-  const u = db.usuarios.find((x) => x.email === salvo && x.ativo);
-  if (u) usuario = u;
-} catch (_) {}
-
-render();
+iniciarDados().then(() => {
+  try {
+    const salvo = sessionStorage.getItem(SESSION_KEY);
+    const u = db.usuarios.find((x) => x.email === salvo && x.ativo);
+    if (u) usuario = u;
+  } catch (_) {}
+  render();
+  if (modoServidor) acompanharServidor();
+});

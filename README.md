@@ -1,6 +1,11 @@
 # Chamado Aberto
 
-Sistema de chamados de manutenção de elevadores e ar-condicionado, do projeto **Jovem Protagonista (IEL Bahia)**. É um protótipo ilustrativo: não tem banco de dados e tudo fica salvo só no navegador de quem usa.
+Sistema de chamados de manutenção de elevadores e ar-condicionado, do projeto **Jovem Protagonista (IEL Bahia)**. É um protótipo ilustrativo.
+
+Pode rodar de dois jeitos:
+
+- **Com o servidor** (Node ou Docker): os dados ficam num banco SQLite e todo mundo vê os mesmos chamados. É o jeito de testar funcionário e suporte em navegadores ou aparelhos diferentes.
+- **Sem servidor** (GitHub Pages ou abrindo o `index.html`): cada navegador guarda os próprios dados, então um chamado aberto num navegador não aparece em outro.
 
 **Acesse:** https://caioluiz-ads.github.io/chamado-aberto/
 
@@ -33,11 +38,30 @@ A **Planilha** continua com os campos ID, Data de Abertura, Solicitante, Setor/A
 
 > O login é uma simulação para apresentação. Não use senhas reais.
 
+## Rodando com banco de dados
+
+Com o Node 24 ou mais novo, sem instalar nada:
+
+```bash
+npm start
+```
+
+Ou com o Docker:
+
+```bash
+docker compose up -d
+```
+
+Abra http://localhost:8080. O servidor também mostra o endereço para abrir no celular ou em outro computador da mesma rede (o Windows pode pedir para liberar no firewall). O banco fica em `dados/chamados.db`, ou no volume `dados` no Docker. Para começar do zero, use **Restaurar exemplo** na Planilha.
+
 ## Estrutura
 
 ```
 chamado-aberto/
 ├── index.html
+├── server/server.js    # Entrega o site e guarda os dados no SQLite (API /api/estado)
+├── Dockerfile
+├── docker-compose.yml
 ├── css/
 │   ├── base.css        # Cores, tipografia, botões e formulários
 │   ├── app.css         # Login, menu, listas, painel e administração
@@ -45,7 +69,7 @@ chamado-aberto/
 └── js/
     ├── dados.js        # Equipe, contas de teste, catálogo e chamados de exemplo
     ├── utils.js        # Formatação e ajudantes de tela
-    ├── estado.js       # Dados salvos no navegador e regras dos chamados
+    ├── estado.js       # Dados (servidor ou navegador) e regras dos chamados
     ├── ui.js           # Menu, barra superior, avisos e confirmação
     ├── conta.js        # Login, notificações, senha e pesquisa de satisfação
     ├── chamados.js     # Lista de chamados, planilha e CSV
@@ -55,7 +79,7 @@ chamado-aberto/
     └── main.js         # Navegação entre as telas
 ```
 
-Feito com HTML, CSS e JavaScript puros, sem instalação. Para rodar no computador, basta abrir o `index.html` no navegador.
+Feito com HTML, CSS e JavaScript puros. O servidor usa só o que já vem no Node, sem pacotes para instalar.
 
 ## Equipe
 

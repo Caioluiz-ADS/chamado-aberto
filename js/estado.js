@@ -1,7 +1,12 @@
-// Estado do sistema, salvo no navegador (localStorage), e as regras dos chamados.
+// Estado do sistema e as regras dos chamados.
+// Com o servidor (server/server.js), os dados ficam no banco e todos veem os mesmos chamados.
+// Sem ele (GitHub Pages, arquivo aberto direto), ficam só no navegador (localStorage).
 
 let db = load();
 let usuario = null;
+let modoServidor = false;
+let versao = 0;
+let fila = Promise.resolve();
 
 function prepararExemplo(c) {
   const categoria = CATALOGO_INICIAL.find((k) => k.servicos.some((s) => s.nome === c.equipamento)).nome;
@@ -37,8 +42,85 @@ function load() {
 }
 
 function save() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); } catch (_) {}
+  if (!modoServidor) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); } catch (_) {}
+    return;
+  }
+  // Um envio por vez, sempre com a versão mais nova que o servidor confirmou.
+  fila = fila.then(enviar).catch(() => {
+    avisar("Não foi possível salvar no servidor. Confira se ele está ligado.");
+    render();
+  });
 }
+
+async function enviar() {
+  const r = await fetch("api/estado", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ versao, dados: db }),
+  });
+  if (r.status === 409) {
+    trocarDados(await r.json());
+    avisar("Outra pessoa alterou os dados ao mesmo tempo. Confira e faça de novo.");
+    fecharJanelas();
+    render();
+    return;
+  }
+  if (!r.ok) throw new Error(r.status);
+  versao = (await r.json()).versao;
+}
+
+function trocarDados(resposta) {
+  versao = resposta.versao;
+  db = resposta.dados;
+  if (usuario) usuario = db.usuarios.find((u) => u.email === usuario.email && u.ativo) || null;
+}
+
+// Descobre se há servidor. Banco vazio recebe os dados de exemplo.
+async function iniciarDados() {
+  try {
+    const r = await fetch("api/estado", { cache: "no-store" });
+    if (!r.ok) return;
+    const resposta = await r.json();
+    modoServidor = true;
+    if (resposta.dados) trocarDados(resposta);
+    else { db = novoBanco(); versao = 0; save(); }
+  } catch (_) {}
+}
+
+// Ninguém está digitando nem com uma janela aberta: dá para trocar os dados e redesenhar.
+function telaLivre() {
+  const el = document.activeElement;
+  const digitando = el && ["INPUT", "TEXTAREA", "SELECT"].includes(el.tagName) && el.closest("form");
+  return !digitando && !$$("dialog").some((d) => d.open);
+}
+
+function atualizarDeFora(novos) {
+  const quem = usuario;
+  trocarDados(novos);
+  if (quem && !usuario) { sair(); return; }
+  render();
+}
+
+// Busca o que os outros salvaram a cada poucos segundos.
+function acompanharServidor() {
+  setInterval(async () => {
+    if (!telaLivre()) return;
+    await fila;
+    try {
+      const r = await fetch("api/estado", { cache: "no-store" });
+      if (!r.ok) return;
+      const resposta = await r.json();
+      if (resposta.versao > versao && resposta.dados && telaLivre()) atualizarDeFora(resposta);
+    } catch (_) {}
+  }, 3000);
+}
+
+// Sem servidor: outra aba do mesmo navegador salvou.
+window.addEventListener("storage", (e) => {
+  if (modoServidor || e.key !== STORAGE_KEY || !e.newValue || !telaLivre()) return;
+  try { atualizarDeFora({ versao: 0, dados: JSON.parse(e.newValue) }); } catch (_) {}
+});
 
 /* ---------- Consultas ---------- */
 

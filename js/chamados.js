@@ -102,7 +102,7 @@ function paginaPlanilha(v) {
       </table>
       ${lista.length ? "" : vazio("ph-tray", "Nenhum chamado com esse status.")}
     </div>
-    <p class="sheet__note">Dados de exemplo. Tudo fica salvo só no seu navegador.</p>`;
+    <p class="sheet__note">${modoServidor ? "Dados salvos no banco do servidor: todos veem os mesmos chamados." : "Dados de exemplo. Tudo fica salvo só no seu navegador."}</p>`;
 
   $$("[data-filter]", v).forEach((b) => b.addEventListener("click", () => { filtro = b.dataset.filter; render(); }));
   $("#btnCsv", v).addEventListener("click", baixarCsv);

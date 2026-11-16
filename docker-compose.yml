@@ -1,0 +1,12 @@
+# Sobe o site com banco de dados: docker compose up -d  ->  http://localhost:8080
+services:
+  chamado-aberto:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - dados:/dados
+    restart: unless-stopped
+
+volumes:
+  dados:

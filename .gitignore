@@ -5,3 +5,6 @@ Thumbs.db
 # Editores
 .vscode/
 .idea/
+
+# Banco de dados local
+dados/

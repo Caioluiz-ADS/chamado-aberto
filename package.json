@@ -1,0 +1,11 @@
+{
+  "name": "chamado-aberto",
+  "private": true,
+  "description": "Sistema de chamados do projeto Jovem Protagonista (IEL Bahia)",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
