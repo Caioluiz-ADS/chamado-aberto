@@ -60,7 +60,10 @@ async function enviar() {
     body: JSON.stringify({ versao, dados: db }),
   });
   if (r.status === 409) {
-    trocarDados(await r.json());
+    const atual = await r.json();
+    // Banco zerado no servidor: os dados desta tela viram o novo começo.
+    if (!atual.dados) { versao = 0; return enviar(); }
+    trocarDados(atual);
     avisar("Outra pessoa alterou os dados ao mesmo tempo. Confira e faça de novo.");
     fecharJanelas();
     render();
@@ -111,7 +114,8 @@ function acompanharServidor() {
       const r = await fetch("api/estado", { cache: "no-store" });
       if (!r.ok) return;
       const resposta = await r.json();
-      if (resposta.versao > versao && resposta.dados && telaLivre()) atualizarDeFora(resposta);
+      // Diferente, e não só maior: se o banco foi zerado, a versão do servidor volta para trás.
+      if (resposta.versao !== versao && resposta.dados && telaLivre()) atualizarDeFora(resposta);
     } catch (_) {}
   }, 3000);
 }
