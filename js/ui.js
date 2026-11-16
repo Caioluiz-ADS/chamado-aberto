@@ -57,6 +57,78 @@ document.addEventListener("click", (e) => {
 
 aplicarTema(temaAtual());
 
+/* ---------- Animações: ligadas por padrão, com botão para desligar ---------- */
+
+const ANIM_KEY = "chamado-aberto:animacoes";
+const animacoesLigadas = () => document.documentElement.getAttribute("data-animacoes") !== "desligadas";
+
+function conteudoBotaoAnimacoes() {
+  const on = animacoesLigadas();
+  return {
+    html: `<i class="ph ${on ? "ph-sparkle" : "ph-pause-circle"}" aria-hidden="true"></i>`,
+    rotulo: on ? "Animações ligadas. Desligar" : "Animações desligadas. Ligar",
+  };
+}
+
+function botaoAnimacoes() {
+  const { html, rotulo } = conteudoBotaoAnimacoes();
+  return `<button type="button" class="icone-btn" data-animacoes-btn aria-pressed="${animacoesLigadas()}" aria-label="${rotulo}" title="${rotulo}">${html}</button>`;
+}
+
+document.addEventListener("click", (e) => {
+  if (!e.target.closest("[data-animacoes-btn]")) return;
+  const ligar = !animacoesLigadas();
+  try {
+    if (ligar) localStorage.removeItem(ANIM_KEY); else localStorage.setItem(ANIM_KEY, "desligadas");
+  } catch (_) {}
+  if (ligar) document.documentElement.removeAttribute("data-animacoes");
+  else document.documentElement.setAttribute("data-animacoes", "desligadas");
+  const { html, rotulo } = conteudoBotaoAnimacoes();
+  $$("[data-animacoes-btn]").forEach((b) => {
+    b.innerHTML = html;
+    b.setAttribute("aria-label", rotulo);
+    b.setAttribute("aria-pressed", String(ligar));
+    b.title = rotulo;
+  });
+  if (ligar) { entradaForcada = true; render(); }
+});
+
+// Números dos cartões contam de zero até o valor (só números inteiros ou porcentagens).
+function contarNumeros(raiz) {
+  if (!animacoesLigadas()) return;
+  $$(".kpi__value", raiz).forEach((el) => {
+    const m = el.textContent.trim().match(/^(\d+)(%?)$/);
+    if (!m || Number(m[1]) === 0) return;
+    const alvo = Number(m[1]);
+    const inicio = performance.now();
+    const passo = (agora) => {
+      const t = Math.min(1, (agora - inicio) / 900);
+      const suave = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(alvo * suave) + m[2];
+      if (t < 1 && el.isConnected) requestAnimationFrame(passo);
+    };
+    el.textContent = "0" + m[2];
+    requestAnimationFrame(passo);
+  });
+}
+
+// Página Sobre: os blocos aparecem conforme a pessoa rola.
+function revelarAoRolar(raiz) {
+  if (!animacoesLigadas() || !("IntersectionObserver" in window)) return;
+  const alvos = $$(".problem__statement, .problem__item, .problem__credit, .section-title, .section-sub, .track__step, .lane, .hub, .bento__cell, .closing__inner, .footer__grid > div", raiz);
+  const io = new IntersectionObserver((entradas) => {
+    entradas.forEach((en) => {
+      if (en.isIntersecting) { en.target.classList.add("is-in"); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
+  alvos.forEach((el) => {
+    const irmaos = [...el.parentElement.children].filter((c) => alvos.includes(c));
+    el.style.setProperty("--d", `${Math.max(0, irmaos.indexOf(el)) * 90}ms`);
+    el.classList.add("revelar");
+    io.observe(el);
+  });
+}
+
 let avisoTexto = "";
 let ultimoQtdSino = 0;
 const avisar = (t) => { avisoTexto = t; };
@@ -134,6 +206,7 @@ function shell(atual) {
       <div class="area">
         <header class="barra">
           <button type="button" class="icone-btn barra__menu" id="btnMenu" aria-label="Abrir menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+          ${botaoAnimacoes()}
           ${botaoTema()}
           <a href="#/notificacoes" class="icone-btn sino" aria-label="Notificações${qtd ? `, ${qtd} não lidas` : ""}">
             <i class="ph ph-bell" aria-hidden="true"></i>${qtd ? `<span class="sino__qtd${sinoNovo ? " sino__qtd--novo" : ""}">${qtd > 9 ? "9+" : qtd}</span>` : ""}

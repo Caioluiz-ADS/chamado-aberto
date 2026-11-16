@@ -7,10 +7,11 @@
   <meta name="description" content="Sistema de chamados de manutenção de elevadores e ar-condicionado. Protótipo ilustrativo do projeto Jovem Protagonista (IEL Bahia).">
   <meta name="color-scheme" content="light dark">
   <script>
-    // Aplica o tema escolhido antes de desenhar a página, para não piscar a cor errada.
+    // Aplica o tema e a escolha de animações antes de desenhar a página, para não piscar.
     try {
       var tema = localStorage.getItem("chamado-aberto:tema");
       if (tema === "claro" || tema === "escuro") document.documentElement.setAttribute("data-tema", tema);
+      if (localStorage.getItem("chamado-aberto:animacoes") === "desligadas") document.documentElement.setAttribute("data-animacoes", "desligadas");
     } catch (_) {}
   </script>
   <link rel="icon" type="image/svg+xml" href="img/logo.svg">
@@ -22,6 +23,7 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/secoes.css">
+  <link rel="stylesheet" href="css/animacoes.css">
 </head>
 <body>
   <div id="app"></div>

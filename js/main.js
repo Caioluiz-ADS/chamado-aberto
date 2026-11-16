@@ -28,6 +28,7 @@ function render() {
   if (rota === "sobre") {
     fecharJanelas();
     $("#app").innerHTML = htmlSobre();
+    revelarAoRolar($("#app"));
     window.scrollTo(0, 0);
     return;
   }
@@ -56,7 +57,10 @@ function render() {
   ligarShell();
   PAGINAS[chave]($("#conteudo"));
   // A animação de entrada só roda ao trocar de tela (ou de período), não a cada salvamento.
-  if (chave !== ultimaChave || entradaForcada) $("#conteudo").classList.add("entrando");
+  if (chave !== ultimaChave || entradaForcada) {
+    $("#conteudo").classList.add("entrando");
+    contarNumeros($("#conteudo"));
+  }
   ultimaChave = chave;
   entradaForcada = false;
 

@@ -1,0 +1,141 @@
+/*
+  Animações do site. Ficam ligadas por padrão, em qualquer computador; o botão
+  de animações (barra superior e página Sobre) desliga tudo de uma vez, com o
+  atributo data-animacoes="desligadas" no <html>.
+*/
+
+@keyframes subir { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes surgir { from { opacity: 0; } to { opacity: 1; } }
+@keyframes deslizar { from { transform: translateX(48px); opacity: .3; } to { transform: none; opacity: 1; } }
+@keyframes saltar { from { opacity: 0; transform: translateY(10px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes crescerY { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes crescerX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes pulso { 0% { transform: scale(.4); } 70% { transform: scale(1.18); } 100% { transform: scale(1); } }
+@keyframes tocar { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(14deg); } 40% { transform: rotate(-12deg); } 60% { transform: rotate(8deg); } 80% { transform: rotate(-4deg); } }
+@keyframes flutuar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes vagar { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(8%, -6%) scale(1.15); } 100% { transform: translate(-6%, 8%) scale(.95); } }
+@keyframes girarPop { from { opacity: 0; transform: scale(.5) rotate(-20deg); } to { opacity: 1; transform: none; } }
+@keyframes deslizarMenu { from { transform: translateX(-100%); } to { transform: none; } }
+@keyframes marcar { from { transform: scale(0) rotate(-45deg); } 60% { transform: scale(1.25); } to { transform: none; } }
+
+/* ---------- Entrada da tela (só ao trocar de tela) ---------- */
+.entrando > * { animation: subir .5s var(--ease) both; }
+.entrando > :nth-child(2) { animation-delay: 60ms; }
+.entrando > :nth-child(3) { animation-delay: 120ms; }
+.entrando > :nth-child(4) { animation-delay: 180ms; }
+.entrando > :nth-child(n+5) { animation-delay: 240ms; }
+.entrando .pagina__icone { animation: girarPop .55s var(--ease) both; animation-delay: 80ms; }
+.entrando tbody tr { animation: subir .45s var(--ease) both; }
+.entrando tbody tr:nth-child(2) { animation-delay: 40ms; }
+.entrando tbody tr:nth-child(3) { animation-delay: 80ms; }
+.entrando tbody tr:nth-child(4) { animation-delay: 120ms; }
+.entrando tbody tr:nth-child(5) { animation-delay: 160ms; }
+.entrando tbody tr:nth-child(6) { animation-delay: 200ms; }
+.entrando tbody tr:nth-child(n+7) { animation-delay: 240ms; }
+
+/* Barras dos gráficos crescem uma depois da outra.
+   Propriedades separadas: o atalho "animation" com var() junto de um atraso próprio é descartado pelo navegador. */
+.entrando .g-col__barra, .entrando .g-barras__barra { animation-duration: .7s; animation-timing-function: var(--ease); animation-fill-mode: both; }
+.entrando .g-col__barra { transform-origin: bottom; animation-name: crescerY; animation-delay: calc(300ms + var(--n) * 15ms); }
+.entrando .g-barras__barra { transform-origin: left; animation-name: crescerX; animation-delay: calc(300ms + var(--n) * 70ms); }
+
+/* ---------- Login e primeiro acesso ---------- */
+.login__marca { position: relative; overflow: hidden; isolation: isolate; }
+.login__marca::before, .login__marca::after {
+  content: ""; position: absolute; z-index: -1; border-radius: 50%; pointer-events: none;
+  filter: blur(40px); opacity: .55;
+}
+.login__marca::before {
+  width: 60%; aspect-ratio: 1; right: -15%; top: -20%;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 65%);
+  animation: vagar 16s ease-in-out infinite alternate;
+}
+.login__marca::after {
+  width: 45%; aspect-ratio: 1; left: -10%; bottom: -15%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 70%, #f59e0b) 0%, transparent 65%);
+  animation: vagar 20s ease-in-out infinite alternate-reverse;
+}
+.login__marca .brand__mark { animation: flutuar 3.2s ease-in-out infinite; }
+.login__marca > div { animation: subir .7s var(--ease) both; animation-delay: 100ms; }
+.login__marca h1 em { animation: subir .7s var(--ease) both; animation-delay: 350ms; }
+.login__form form { animation: subir .6s var(--ease) both; animation-delay: 150ms; }
+.demo__acc { animation: subir .5s var(--ease) both; }
+.demo__acc:nth-of-type(1) { animation-delay: 350ms; }
+.demo__acc:nth-of-type(2) { animation-delay: 420ms; }
+.demo__acc:nth-of-type(3) { animation-delay: 490ms; }
+
+/* ---------- Painel, janelas e fundo ---------- */
+.painel[open] { animation: deslizar .38s var(--ease); }
+.janela[open] { animation: saltar .28s var(--ease); }
+dialog[open]::backdrop { animation: surgir .3s ease; }
+.painel__corpo > * { animation: subir .35s var(--ease) both; }
+.painel__corpo > :nth-child(2) { animation-delay: 40ms; }
+.painel__corpo > :nth-child(3) { animation-delay: 80ms; }
+.painel__corpo > :nth-child(n+4) { animation-delay: 120ms; }
+.notas label:has(input:checked) i { animation: pulso .4s var(--ease); }
+
+/* ---------- Avisos, alertas e notificações ---------- */
+.aviso, .alerta, .senha-gerada { animation: saltar .4s var(--ease) both; }
+.aviso i { animation: marcar .5s var(--ease) both; animation-delay: 150ms; }
+.sino__qtd--novo { animation: pulso .5s var(--ease) both; }
+.sino:has(.sino__qtd--novo) > i { animation: tocar .9s ease both; transform-origin: top center; }
+.empty > i { display: inline-block; animation: flutuar 3s ease-in-out infinite; }
+
+/* ---------- Menu ---------- */
+.menu.is-aberto { animation: deslizarMenu .3s var(--ease); }
+.menu .brand__mark { transition: transform .4s var(--ease); }
+.menu .brand:hover .brand__mark { transform: rotate(-8deg) scale(1.08); }
+.menu a:not(.brand) i { transition: transform .25s var(--ease); }
+.menu a:not(.brand):hover i { transform: translateX(2px) scale(1.12); }
+
+/* ---------- Respostas ao mouse e ao toque ---------- */
+.btn, .chip, .aba, .demo__acc, .icone-btn, .link-btn, .menu a, .notifs a, .kpi, .g-cartao, .cartao, .pessoas li, .anexos li {
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .25s var(--ease), box-shadow .25s ease;
+}
+.btn { position: relative; overflow: hidden; }
+.btn::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / .28) 50%, transparent 70%);
+  transform: translateX(-130%); transition: transform .7s var(--ease);
+}
+.btn:hover:not([disabled])::after { transform: translateX(130%); }
+.btn:hover:not([disabled]) { transform: translateY(-2px); box-shadow: 0 8px 18px -8px color-mix(in srgb, var(--accent) 60%, transparent); }
+.btn:active:not([disabled]), .chip:active, .icone-btn:active, .demo__acc:active { transform: scale(.96); }
+.demo__acc:hover, .notifs a:hover { transform: translateX(4px); }
+.kpi:hover, .g-cartao:hover, .pessoas li:hover, .anexos li:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.linha td { transition: background-color .2s ease, box-shadow .2s ease; }
+.linha:hover td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.linha:hover .numero { transform: scale(1.06); }
+.numero { display: inline-block; transition: transform .2s var(--ease); }
+.g-col__barra, .g-barras__barra { transition: background-color .15s ease, filter .15s ease; }
+.g-col:hover .g-col__barra, .g-barras li:hover .g-barras__barra { filter: brightness(1.12); }
+[data-tema-btn] i, [data-animacoes-btn] i { transition: transform .45s var(--ease); }
+[data-tema-btn]:hover i { transform: rotate(-30deg); }
+[data-animacoes-btn]:hover i { transform: rotate(20deg) scale(1.15); }
+.field input, .field select, .field textarea { transition: border-color .2s ease, box-shadow .2s ease; }
+
+/* Troca de tema suave */
+body, .menu, .barra, .tabela, .cartao, .kpi, .g-cartao, .painel, .login__form { transition: background-color .35s ease, color .35s ease, border-color .35s ease; }
+
+/* ---------- Página Sobre: blocos aparecem ao rolar ---------- */
+.revelar { opacity: 0; transform: translateY(28px); transition: opacity .8s var(--ease), transform .8s var(--ease); transition-delay: var(--d, 0ms); }
+.revelar.is-in { opacity: 1; transform: none; }
+.sobre .hero h1, .sobre .hero .lead, .sobre .hero .eyebrow { animation: subir .8s var(--ease) both; }
+.sobre .hero .eyebrow { animation-delay: 50ms; }
+.sobre .hero h1 { animation-delay: 150ms; }
+.sobre .hero .lead { animation-delay: 300ms; }
+.track__icon { transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease); }
+.track__step:hover .track__icon { transform: scale(1.1); }
+.bento__cell { transition: transform .3s var(--ease), box-shadow .3s ease; }
+.bento__cell:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+
+/* ---------- Animações desligadas no botão ---------- */
+:root[data-animacoes="desligadas"] *,
+:root[data-animacoes="desligadas"] *::before,
+:root[data-animacoes="desligadas"] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+:root[data-animacoes="desligadas"] .revelar { opacity: 1; transform: none; }
+:root[data-animacoes="desligadas"] .login__marca::before,
+:root[data-animacoes="desligadas"] .login__marca::after { display: none; }

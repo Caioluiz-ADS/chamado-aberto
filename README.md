@@ -27,7 +27,7 @@ O botão de tema (sol, lua ou meio círculo), na barra superior, no login e na p
 
 Suporte e administrador têm a página **Indicadores**, com números e gráficos do período escolhido (7, 30 ou 90 dias, ou tudo): chamados abertos por dia, por status, por equipamento, tempo médio de resolução por técnico e respostas da pesquisa de satisfação. Cada gráfico tem a opção **Ver dados em tabela**.
 
-As animações são suaves e somem para quem ativa a redução de movimento no sistema.
+As animações ficam ligadas por padrão. O botão de brilho, na barra superior e na página Sobre, desliga e liga de novo; a escolha fica salva no navegador.
 
 A **Planilha**, só para suporte e administrador, continua com os campos ID, Data de Abertura, Solicitante, Setor/Andar, Equipamento, Tipo de Problema, Status e Tempo de Resolução, calcula o tempo médio e o equipamento com mais falhas, filtra por status e exporta em CSV.
 
@@ -83,6 +83,7 @@ chamado-aberto/
 ├── css/
 │   ├── base.css        # Cores, tipografia, botões e formulários
 │   ├── app.css         # Login, menu, listas, painel e administração
+│   ├── animacoes.css   # Todas as animações (o botão desliga tudo)
 │   └── secoes.css      # Página Sobre o projeto
 └── js/
     ├── dados.js        # Equipe, contas de teste, catálogo e chamados de exemplo
